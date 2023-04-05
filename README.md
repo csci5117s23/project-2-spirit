@@ -35,7 +35,52 @@ Which (if any) progressive web app feature(s) does your app support?
 
 **[Add images/photos that show your mockup](https://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository) along with a very brief caption:**
 
-![](https://media.giphy.com/media/26ufnwz3wDUli7GU0/giphy.gif)
+### Home Screen (Pantry View)
+
+The main home screen shows the user their pantry items. These items are sorted by expiration date and category.
+
+![Home View](mockup-images/pantry-home.png)
+
+### Sidebar
+
+The sidebar can be accessed from any page.
+
+![App Sidebar](mockup-images/app-sidebar.png)
+
+### Add new Pantry Item Flow
+
+If the user does not have the camera capability available or declines it, the barcode/photo steps are skipped and the user is brought directly to details (same as if they click "manual entry").
+
+![Add New Item - Barcode](mockup-images/add-item-barcode.png)
+
+![Add New Item - Photo](mockup-images/add-item-picture.png)
+
+From the manual recipe entry, the user can use "take photo" to go back to the camera and/or upload an image file (on mobile it will use the standard prompt for add images/take picture, on desktop just file upload).
+
+![Add New Item - Details](mockup-images/add-item-manual.png)
+
+### Recipe Wizard
+
+The recipe wizard page features some pre-made suggestions for types of recipes to generate as well as a prompt input if a user wants to ask for something specific.
+
+![Recipe Wizard Main](mockup-images/recipe-wizard-home.png)
+
+When the user clicks on a category or enters a prompt, once the recommender gets back with a suggestion, it will show the suggestion list. Clicking any of these bring the user to the recipe view, where they can view the recipe and save it to their recipe book if they wish.
+
+![Recipe Wizard Suggestions](mockup-images/recipe-wizard-suggestions.png)
+
+### Recipe View 
+
+This view supports an inline editor for changing details (it will also be reused for the new recipe flow if a user manually creates a recipe).
+
+![Recipe View](mockup-images/recipe-view.png)
+
+
+### Recipe Book
+
+Clicking on new recipe will bring the user to an empty recipe view with inline edit mode active.
+
+![Recipe Book](mockup-images/)
 
 
 ## Testing Notes

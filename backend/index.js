@@ -17,7 +17,7 @@ const PantryYup = object({
   group: string().required(),
   quantity: string(),
   expiration: date(),
-  image: string().required(),
+  image: string(),
   userId: string().required(),
   createdOn: date().default(() => new Date()),
 });

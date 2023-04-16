@@ -133,6 +133,7 @@ export class Prompts {
             
             Where "Recipe" is a JSON object of the form:
             {
+                name: string,
                 ingredients: string[],
                 steps: string[],
                 ingredientsInPantry: number,

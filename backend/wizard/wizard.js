@@ -6,7 +6,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const OPENAI_MODEL = "gpt-4"
+const OPENAI_MODEL = "gpt-3.5-turbo"
 const RETRY_DELAY_MILLIS = 2500
 
 
@@ -20,6 +20,8 @@ function buildPrompt(promptContent) {
         ${promptContent}
     `
 }
+
+const antiHarmContext = `If the recipe prompt or ingredients are offensive, not food, or potentially dangerous to the user, you should instead generate an error explaining to the user why you are unable to generate this recipe with additional context in a full sentence to inform and educate them.`
 
 
 /**
@@ -105,6 +107,8 @@ export class Prompts {
             
             Where the error is "Not enough ingredients to suggest categories" and context is some additional context
             a developer can use to debug why you are unable to generate categories from these ingredients.
+            
+            ${antiHarmContext}
         `
         return {prompt: data}
     }
@@ -114,12 +118,13 @@ export class Prompts {
             The user will give you a JSON object of the following form:
             {
                 recipe: string,
-                ingredients: string[]
+                ingredients: string[] | string | null
             }
             
             Based on these ingredients and a recipe prompt, please respond with a recipe that uses as many of the
             ingredients the user provides as possible (to the extent that makes sense in the recipe) in addition to
-            common spices, cooking oils, or other household items.
+            common spices, cooking oils, or other household items. The ingredients should contain kitchen-measurable quantities
+            wherever appropriate.
             
             Please respond with a JSON object of the following form:
             {
@@ -135,17 +140,21 @@ export class Prompts {
             }
             
             where totalIngredients is the total number of ingredients in the recipe and ingredientsInPantry is the number
-            of ingredients in the recipe the user currently has in their ingredients array.
+            of ingredients in the recipe the user currently has in their ingredients array. If ingredients are empty, simply
+            generate a recipe based on the recipe field prompt regardless of the ingredients the user has.
             
-            If it is not possible to suggest some recipes based on the user's information, you should
-            instead respond with a JSON object of the following form:
+            If the ingredients are provided and it is not possible to suggest some recipes based on the user's ingredients, 
+            you should instead respond with a JSON object of the following form:
             {
                 error: string,
                 context: string
             }        
             
             Where the error is "Not enough ingredients to suggest recipes for prompt" and context is some additional context
-            a developer can use to debug why you are unable to generate categories from these ingredients.
+            a developer can use to debug why you are unable to generate categories from these ingredients. If the user provides
+            invalid ingredients, no ingredients, or an invalid data type for the ingredients, just ignore the ingredients.
+            
+            ${antiHarmContext}
         `
         return {prompt: data}
     }

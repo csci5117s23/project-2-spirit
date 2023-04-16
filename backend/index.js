@@ -38,13 +38,13 @@ app.get('/wizard/categories', async (req, res) => {
 app.get('/wizard/recipe', async (req, res) => {
   if (!req.query.recipe) {
     res.json({error: "No recipe prompt provided"})
-  } else if (!req.query.ingredients) {
-    res.json({error: "No ingredients prompt provided."})
   } else {
-    const response = await generateWizardResponse(Prompts.recommendRecipe(), {
-      ingredients: req.query.ingredients,
+    const message = {
+      ingredients: req.query.ingredients ?? [],
       recipe: req.query.recipe,
-    })
+    }
+    console.log("User is requesting with message ", message)
+    const response = await generateWizardResponse(Prompts.recommendRecipe(), message)
     res.json(response)
   }
 })

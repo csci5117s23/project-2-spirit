@@ -6,6 +6,7 @@
 import {app} from 'codehooks-js'
 import {crudlify} from 'codehooks-crudlify'
 import { date, object, string} from 'yup';
+import jwtDecode from 'jwt-decode';
 
 // test route for https://<PROJECTID>.api.codehooks.io/dev/
 app.get('/', (req, res) => {

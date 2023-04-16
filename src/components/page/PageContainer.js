@@ -7,8 +7,8 @@
  */
 import {IconArticle, IconFridge, IconPlus, IconWand} from "@tabler/icons-react";
 import {useRouter} from "next/router";
-import {Container} from "@mantine/core";
 import PantryAppShell from "@/components/page/PantryAppShell";
+import {RedirectToSignIn, SignedIn, SignedOut} from "@clerk/nextjs";
 
 const navLinks = [
     {link: '/', label: "Your Pantry", icon: IconFridge},
@@ -23,9 +23,14 @@ export default function PageContainer(props) {
 
     return (
         <>
-            <PantryAppShell links={navLinks} activeRoute={active}>
-                {props.children}
-            </PantryAppShell>
+            <SignedIn>
+                <PantryAppShell links={navLinks} activeRoute={active}>
+                    {props.children}
+                </PantryAppShell>
+            </SignedIn>
+            <SignedOut>
+                <RedirectToSignIn />
+            </SignedOut>
         </>
     )
 }

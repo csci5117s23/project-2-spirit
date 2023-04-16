@@ -5,6 +5,7 @@ export async function getPantry(authToken) {
         'method':'GET',
         'headers': {'Authorization': 'Bearer ' + authToken}
     })
+    console.log("Result is ", result)
     return await result.json();
 }
 

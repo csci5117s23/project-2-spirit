@@ -6,4 +6,5 @@ const authHeader = (authToken) => ({'Authorization': 'Bearer ' + authToken})
 
 export async function getCategories(authToken) {
     const pantry = await getPantry(authToken)
+    console.log("User's pantry is ", pantry)
 }

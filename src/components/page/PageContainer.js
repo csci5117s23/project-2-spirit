@@ -7,13 +7,14 @@
  */
 import {IconArticle, IconFridge, IconPlus, IconWand} from "@tabler/icons-react";
 import {useRouter} from "next/router";
-import MainNav from "@/components/page/MainNav";
+import {Container} from "@mantine/core";
+import PantryAppShell from "@/components/page/PantryAppShell";
 
 const navLinks = [
-    { link: '/', label: "Your Pantry", icon: IconFridge },
-    { link: '/add', label: "Add Item", icon: IconPlus },
-    { link: '/wizard', label: "Recipe Wizard", icon: IconWand },
-    { link: '/recipes', label: "Your Recipes", icon: IconArticle },
+    {link: '/', label: "Your Pantry", icon: IconFridge},
+    {link: '/add', label: "Add Item", icon: IconPlus},
+    {link: '/wizard', label: "Recipe Wizard", icon: IconWand},
+    {link: '/recipes', label: "Your Recipes", icon: IconArticle},
 ]
 export default function PageContainer(props) {
 
@@ -21,8 +22,10 @@ export default function PageContainer(props) {
     const active = navLinks.find(l => l.link === router.pathname)
 
     return (
-        <MainNav links={navLinks} activeRoute={active}>
-            {props.children}
-        </MainNav>
+        <>
+            <PantryAppShell links={navLinks} activeRoute={active}>
+                {props.children}
+            </PantryAppShell>
+        </>
     )
 }

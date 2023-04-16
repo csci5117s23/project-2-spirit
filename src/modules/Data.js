@@ -17,3 +17,21 @@ export async function addPantry(authToken, values) {
     })
     return await result.json();
 }
+
+export async function updatePantry(authToken, pantry){
+    const result = await fetch(base_url+"/pantry/"+pantry._id,{
+        'method':'PUT',
+        'headers': {'Authorization': 'Bearer ' + authToken,
+        'Content-Type': 'application/json'},
+        'body': JSON.stringify(pantry)
+    })
+    return await result.json();
+}
+
+export async function deletePantry(authToken, pantry){
+    const result = await fetch(base_url+"/pantry/"+pantry._id,{
+        'method':'DELETE',
+        'headers': {'Authorization': 'Bearer ' + authToken},
+    })
+    return await result.json();
+}

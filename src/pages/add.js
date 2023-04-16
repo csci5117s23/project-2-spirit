@@ -25,7 +25,7 @@ export default function Add(){
         const token = await getToken({ template: "codehooks" });
         const newPantryItem = await addPantry(token, vals);
         console.log(vals);
-        router.push('/');
+        router.push('/pantry');
 
     }
 

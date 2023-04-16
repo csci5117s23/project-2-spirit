@@ -11,7 +11,7 @@ import PantryAppShell from "@/components/page/PantryAppShell";
 import {RedirectToSignIn, SignedIn, SignedOut} from "@clerk/nextjs";
 
 const navLinks = [
-    {link: '/', label: "Your Pantry", icon: IconFridge},
+    {link: '/pantry', label: "Your Pantry", icon: IconFridge},
     {link: '/add', label: "Add Item", icon: IconPlus},
     {link: '/wizard', label: "Recipe Wizard", icon: IconWand},
     {link: '/recipes', label: "Your Recipes", icon: IconArticle},

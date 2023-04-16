@@ -1,5 +1,5 @@
 import PageContainer from "@/components/page/PageContainer";
-import {Button, Container, Badge, TextInput, Box, List} from "@mantine/core";
+import {Button, Container, Badge, TextInput, Card, List, Grid} from "@mantine/core";
 import {useEffectWithAuth} from "@/hook/useEffectWithAuth";
 import { useInputState } from '@mantine/hooks';
 import {useEffect, useState} from "react";
@@ -40,7 +40,7 @@ export default function PantryHome(){
 }
 
 const PantryItem = ({item, onChange}) => {
-    //TODO: image support, update quantity
+    //TODO: image support, date format, styling
     const [quantity, setQuantity] = useInputState(item.quantity);
     const { getToken } = useAuth();
 
@@ -57,21 +57,25 @@ const PantryItem = ({item, onChange}) => {
         onChange(newList);
     }
 
-
     return(<>
-    <Container>
-        <Box 
-            sx={() => ({
-                backgroundColor: 'aqua',
-            })}>
-            <h2>{item.name}</h2>
-            <Badge>{item.group}</Badge>
-            <TextInput label="Quantity" value={quantity} onChange={setQuantity} />
-            <Button onClick={update}>Save</Button>
-            <h2>Expires on: {item.expiration}</h2>
-            <Button onClick={deleteItem}>Delete item</Button>
-        </Box>
-    </Container>
+        <Card>
+            <Grid grow>
+                <Grid.Col>
+                    <h2>{item.name}</h2>
+                    <Badge>{item.group}</Badge>
+                </Grid.Col>
+                <Grid.Col>
+                    <TextInput label="Quantity" value={quantity} onChange={setQuantity} />
+                    <Button onClick={update}>Save</Button>
+                </Grid.Col>
+                <Grid.Col>
+                    <h2>Expires on: {item.expiration}</h2>
+                </Grid.Col>
+                <Grid.Col>
+                    <Button onClick={deleteItem}>Delete item</Button>
+                </Grid.Col>
+            </Grid>
+        </Card>
     </>);
 }
 

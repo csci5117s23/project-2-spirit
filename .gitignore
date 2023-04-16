@@ -184,3 +184,7 @@ next-env.d.ts
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,git,yarn,nextjs
 .idea/
+
+*.env
+backend/*.env
+backend/.localserver

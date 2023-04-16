@@ -4,6 +4,7 @@ import {useEffectWithAuth} from "@/hook/useEffectWithAuth";
 import {getRecipes} from "@/modules/Wizard";
 import {Alert, Center, Container, Loader, Text} from "@mantine/core";
 import {IconAlertCircle} from "@tabler/icons-react";
+import PageContainer from "@/components/page/PageContainer";
 
 
 export default function WizardRecipeView() {
@@ -31,12 +32,15 @@ export default function WizardRecipeView() {
         }
     } else {
         return (
-            <Container>
-                <Text fz={`xl`} fw={600}>Great ideas await!</Text>
-                <Text>Please wait while we generate some recipe ideas. This may take a while depending on current OpenAI
-                    system load.</Text>
-                <Loader/>
-            </Container>
+            <PageContainer>
+                <Container>
+                    <Text fz={`xl`} fw={600}>Great ideas await!</Text>
+                    <Text>Please wait while we generate some recipe ideas. This may take a while depending on current
+                        OpenAI
+                        system load.</Text>
+                    <Loader/>
+                </Container>
+            </PageContainer>
         )
     }
 

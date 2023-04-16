@@ -58,6 +58,7 @@ const PantryItem = ({item, onChange}) => {
     }
 
     return(<>
+    <Container>
         <Card>
             <Grid grow>
                 <Grid.Col>
@@ -76,6 +77,7 @@ const PantryItem = ({item, onChange}) => {
                 </Grid.Col>
             </Grid>
         </Card>
+    </Container>
     </>);
 }
 
@@ -98,7 +100,7 @@ const PantryList = ({items, onChange}) => {
     return(<>
     {categories.map(category => (<>
         <h1>{category}</h1>
-        <List listStyleType="none">
+        <List listStyleType="none" spacing="sm">
             {items.filter(item => item.group == category).map(item => (
                <List.Item>
                 <PantryItem item={item} onChange={onChange}></PantryItem>

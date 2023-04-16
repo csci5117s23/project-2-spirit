@@ -1,10 +1,12 @@
 import '@/styles/globals.css'
+import { ClerkProvider } from '@clerk/nextjs';
 import {MantineProvider} from '@mantine/core';
 import Head from "next/head";
 
 export default function App({Component, pageProps}) {
     return (
         <>
+        <ClerkProvider {...pageProps} >
             <Head>
                 <title>PantryPro</title>
                 <meta name="description" content="Manage your pantry like a pro!"/>
@@ -21,6 +23,7 @@ export default function App({Component, pageProps}) {
             >
                 <Component {...pageProps} />
             </MantineProvider>
+        </ClerkProvider>
         </>
     )
 }

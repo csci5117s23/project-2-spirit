@@ -12,7 +12,7 @@ export default function Scan() {
         facingMode: "user",
     };
 
-    return (
+    return (<>
         <Webcam
             audio={false}
             width={400}
@@ -24,9 +24,10 @@ export default function Scan() {
             <button onClick={() => {
                 setImgSrc(getScreenshot());
             }}>Capture</button>)}
-            {/* {imgSrc && (
-                <img src={imgSrc}/>
-            )} */}
+            
         </Webcam>
-    );
+        {imgSrc && (
+            <img src={imgSrc}/>
+        )}
+    </>);
 }

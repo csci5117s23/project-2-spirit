@@ -21,7 +21,7 @@ export default function PantryHome(){
             })
     })
 
-    function onDelete(newItems){
+    function onChange(newItems){
         setPantryItems(newItems);
     }
 
@@ -32,14 +32,14 @@ export default function PantryHome(){
                 <Container>
                     <h1>Your pantry</h1>
                     <Button onClick={() => router.push('/add')}>Add item to pantry</Button>
-                    <PantryList items={pantryItems} onDelete={onDelete}></PantryList>
+                    <PantryList items={pantryItems} onChange={onChange}></PantryList>
                  </Container>
                 </PageContainer></>);
     }
     
 }
 
-const PantryItem = ({item, onDelete}) => {
+const PantryItem = ({item, onChange}) => {
     //TODO: image support, update quantity
     const [quantity, setQuantity] = useInputState(item.quantity);
     const { getToken } = useAuth();
@@ -54,7 +54,7 @@ const PantryItem = ({item, onDelete}) => {
         const token = await getToken({ template: "codehooks" });
         const deleted = await deletePantry(token, item);
         const newList = await getPantry(token);
-        onDelete(newList);
+        onChange(newList);
     }
 
 
@@ -75,7 +75,7 @@ const PantryItem = ({item, onDelete}) => {
     </>);
 }
 
-const PantryList = ({items, onDelete}) => {
+const PantryList = ({items, onChange}) => {
     //example based on https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/@@iterator
     function getCategories(){
         let categoryMap = new Map();
@@ -97,7 +97,7 @@ const PantryList = ({items, onDelete}) => {
         <List listStyleType="none">
             {items.filter(item => item.group == category).map(item => (
                <List.Item>
-                <PantryItem item={item} onDelete={onDelete}></PantryItem>
+                <PantryItem item={item} onChange={onChange}></PantryItem>
                </List.Item> 
                ))}
         </List>

@@ -2,7 +2,7 @@ import {useRouter} from "next/router";
 import {useState} from "react";
 import {useEffectWithAuth} from "@/hook/useEffectWithAuth";
 import {getRecipes} from "@/modules/Wizard";
-import {Alert, Card, Center, Container, Divider, List, Loader, Text} from "@mantine/core";
+import {Alert, Badge, Card, Center, Container, Divider, List, Loader, Text} from "@mantine/core";
 import {IconAlertCircle} from "@tabler/icons-react";
 import PageContainer from "@/components/page/PageContainer";
 
@@ -43,6 +43,7 @@ export default function WizardRecipeView() {
         } else {
             return (<WrapWithPage>{response.recipes.map((recipe, idx) => (
                 <Card key={idx}>
+                    <Badge>{recipe.ingredientsInPantry ?? 0}/ {recipe.totalIngredients ?? 0} Ingredients in Pantry</Badge>
                     <Text fz={`xl`} fw={800}>{recipe.name ?? "Unknown Recipe"}</Text>
                     <Divider />
                     <Text fz={`lg`} fw={600}>Ingredients</Text>
@@ -76,7 +77,8 @@ export default function WizardRecipeView() {
                     <Text>Please wait while we generate some recipe ideas. This may take a while depending on current
                         OpenAI
                         system load.</Text>
-                    <Loader/>
+                    <br />
+                    <Center><Loader /></Center>
             </WrapWithPage>
         )
     }

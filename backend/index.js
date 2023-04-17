@@ -31,6 +31,7 @@ app.get('/wizard/categories', async (req, res) => {
     const response = await generateWizardResponse(Prompts.recommendCategories(), {
       ingredients: req.query.ingredients,
     })
+    console.log("Response to category suggestions is ", response)
     res.json(response)
   }
 })
@@ -45,6 +46,7 @@ app.get('/wizard/recipe', async (req, res) => {
     }
     console.log("User is requesting with message ", message)
     const response = await generateWizardResponse(Prompts.recommendRecipe(), message)
+    console.log("GPT response is ", response)
     res.json(response)
   }
 })

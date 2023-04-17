@@ -6,7 +6,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const OPENAI_MODEL = "gpt-3.5-turbo"
+const OPENAI_MODEL = "gpt-4"
 const RETRY_DELAY_MILLIS = 2500
 
 

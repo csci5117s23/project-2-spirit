@@ -1,5 +1,6 @@
 import Webcam from "react-webcam";
-import { React, useState } from "react";
+import { React, useState, useContext } from "react";
+import Link from "next/link";
 
 // https://www.npmjs.com/package/react-webcam
 
@@ -26,8 +27,11 @@ export default function Scan() {
             }}>Capture</button>)}
             
         </Webcam>
-        {imgSrc && (
+        {imgSrc && (<>
             <img src={imgSrc}/>
-        )}
+            <Link href="./info" onClick={() => {
+                localStorage.setItem("productImage", imgSrc);
+            }}>Use this image!</Link>
+        </>)}
     </>);
 }

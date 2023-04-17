@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import {
     AppShell,
+    createStyles,
     Navbar,
     Header,
     Footer,
@@ -14,10 +15,19 @@ import {
 import Link from "next/link";
 import {SignedIn, SignedOut, SignInButton, UserButton, UserProfile} from "@clerk/nextjs";
 
+const appShellStyles = createStyles((theme) => ({
+    UserButton: {
+        '.cl-userButtonBox': {
+            flexDirection: 'row-reverse',
+        }
+    },
+}));
+
 // Source: https://mantine.dev/core/app-shell/
 
 export default function PantryAppShell({ links, activeRoute, children }) {
     const theme = useMantineTheme();
+    const { classes } = appShellStyles(theme);
     const [opened, setOpened] = useState(false);
 
     const items = links.map((link) => (
@@ -48,7 +58,9 @@ export default function PantryAppShell({ links, activeRoute, children }) {
                     <Navbar.Section>
                         <Center>
                         <SignedIn>
-                            <UserButton showName={true}/>
+                            <div className={classes.UserButton}>
+                                <UserButton showName={true}/>
+                            </div>
                         </SignedIn>
                         <SignedOut>
                             <Button component={SignInButton}>Sign In</Button>

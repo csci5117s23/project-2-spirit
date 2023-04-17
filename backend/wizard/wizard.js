@@ -6,7 +6,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const OPENAI_MODEL = "gpt-4"
+const OPENAI_MODEL = "gpt-3.5-turbo"
 const RETRY_DELAY_MILLIS = 2500
 
 
@@ -95,7 +95,10 @@ export class Prompts {
             
             Please respond with a JSON object of the form:
             {
-                categories: string[]
+                categories: {
+                    name: string,
+                    description: string
+                }
             }
             
             If it is not possible to suggest some categories of recipe the user might want to try, you should
@@ -142,7 +145,8 @@ export class Prompts {
             
             where totalIngredients is the total number of ingredients in the recipe and ingredientsInPantry is the number
             of ingredients in the recipe the user currently has in their ingredients array. If ingredients are empty, simply
-            generate a recipe based on the recipe field prompt regardless of the ingredients the user has.
+            generate a recipe based on the recipe field prompt regardless of the ingredients the user has. The recipes do
+            not necessarily need to use the entire amount of an ingredient the user has.
             
             If the ingredients are provided and it is not possible to suggest some recipes based on the user's ingredients, 
             you should instead respond with a JSON object of the following form:

@@ -79,7 +79,7 @@ const WizardCategoryRecommendation = ({response}) => {
                 <Grid gutter={4}>
                     {response.response.categories
                         .map((category, index) => (
-                            <Grid.Col span={4} key={index}>
+                            <Grid.Col sm={12} md={4} lg={4} key={index}>
                                 <WizardCategory category={category}/>
                             </Grid.Col>
                         ))}
@@ -109,15 +109,18 @@ const WizardCategory = ({category}) => {
     return (
         <Card withBorder onClick={() => {
             router.push("/wizard/recipes?" + new URLSearchParams({
-                recipe: category
+                recipe: category.name ?? "Unknown recipe"
             }))
                 .then()
         }} className={styles.classes.categoryCard}>
             <Badge>Recommendation</Badge>
             <Text fz="lg" fw={500} mt="md">
-                {category}
+                {category.name ?? "Unknown category name"}
             </Text>
             <Text fz="sm" c="dimmed" mt={5}>
+                {category.description ?? "Unknown category description"}
+            </Text>
+            <Text fz={"sm"} mt={5}>
                 Click to generate a recipe based on this suggestion!
             </Text>
         </Card>

@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { useState } from 'react';
 import {
     AppShell,
@@ -47,7 +48,7 @@ export default function PantryAppShell({ links, activeRoute, children }) {
                     <Navbar.Section>
                         <Center>
                         <SignedIn>
-                            <UserButton />
+                            <UserButton showName={true}/>
                         </SignedIn>
                         <SignedOut>
                             <Button component={SignInButton}>Sign In</Button>
@@ -57,7 +58,12 @@ export default function PantryAppShell({ links, activeRoute, children }) {
                 </Navbar>
             }
             footer={
-                <Footer height={60} p="md">
+                <Footer
+                    css={{
+                        textAlign: 'center'
+                    }}
+                    height={60} p="md"
+                >
                     Copyright 2023 PantryPro.
                 </Footer>
             }

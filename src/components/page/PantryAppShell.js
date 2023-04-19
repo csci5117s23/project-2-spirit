@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import {
     AppShell,
-    createStyles,
     Navbar,
     Header,
     Footer,
@@ -47,7 +46,7 @@ export default function PantryAppShell({ links, activeRoute, children }) {
     const theme = useMantineTheme();
     const { classes } = appShellStyles(theme);
     const [opened, setOpened] = useState(false);
-    const {classes} = useStyles();
+    //const {classes} = useStyles();
 
     const items = links.map((link) => (
         <NavLink

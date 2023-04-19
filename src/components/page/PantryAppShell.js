@@ -80,7 +80,7 @@ export default function PantryAppShell({ links, activeRoute, children }) {
                             />
                         </MediaQuery>
 
-                        <Text style={{ fontWeight: 800 }}>PantryPro</Text>
+                        <img src={`./logo.svg`} alt={`PantryPro`} height={32}/>
                     </div>
                 </Header>
             }

@@ -44,9 +44,9 @@ export default function WizardRecipeView() {
             return (<WrapWithPage>{response.recipes.map((recipe, idx) => (
                 <Card key={idx}>
                     <Badge>{recipe.ingredientsInPantry ?? 0}/ {recipe.totalIngredients ?? 0} Ingredients in Pantry</Badge>
-                    <Text fz={`xl`} fw={800}>{recipe.name ?? "Unknown Recipe"}</Text>
+                    <h1>{recipe.name ?? "Unknown Recipe"}</h1>
                     <Divider />
-                    <Text fz={`lg`} fw={600}>Ingredients</Text>
+                    <h2>Ingredients</h2>
                     {(recipe.ingredients && recipe.ingredients.length > 0) ?
                         (<List>
                                 {recipe.ingredients.map((ingredient, idx) => (
@@ -56,7 +56,7 @@ export default function WizardRecipeView() {
                             <Text>No ingredients needed</Text>
                         )
                     }
-                    <Text fz={`lg`} fw={600}>Ingredients</Text>
+                    <h2>Steps</h2>
                     {(recipe.steps && recipe.ingredients.length > 0) ?
                         (<List>
                             {recipe.steps.map((step, idx) => (

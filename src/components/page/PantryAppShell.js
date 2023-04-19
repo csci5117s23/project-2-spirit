@@ -20,12 +20,7 @@ const appShellStyles = createStyles((theme) => ({
             flexDirection: 'row-reverse',
         }
     },
-}));
 
-// Source: https://mantine.dev/core/app-shell/
-
-const darkMode = (theme) => theme.colorScheme === "dark"
-const useStyles = createStyles((theme) => ({
     navLink: {
         svg: {
             color: theme.colors["brandPrimary"][darkMode(theme) ? 1 : 9]
@@ -41,12 +36,16 @@ const useStyles = createStyles((theme) => ({
 
         transition: "all ease-in-out 0.2s",
     }
-}))
+}));
+
+// Source: https://mantine.dev/core/app-shell/
+
+const darkMode = (theme) => theme.colorScheme === "dark"
+
 export default function PantryAppShell({ links, activeRoute, children }) {
     const theme = useMantineTheme();
     const { classes } = appShellStyles(theme);
     const [opened, setOpened] = useState(false);
-    //const {classes} = useStyles();
 
     const items = links.map((link) => (
         <NavLink

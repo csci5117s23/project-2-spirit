@@ -9,16 +9,35 @@ import {
     Text,
     MediaQuery,
     Burger,
-    useMantineTheme, NavLink, Button, Center,
+    useMantineTheme, NavLink, Button, Center, createStyles,
 } from '@mantine/core';
 import Link from "next/link";
 import {SignedIn, SignedOut, SignInButton, UserButton, UserProfile} from "@clerk/nextjs";
 
 // Source: https://mantine.dev/core/app-shell/
 
+const darkMode = (theme) => theme.colorScheme === "dark"
+const useStyles = createStyles((theme) => ({
+    navLink: {
+        svg: {
+            color: theme.colors["brandPrimary"][darkMode(theme) ? 1 : 9]
+        },
+        fontWeight: 600,
+
+        "&:hover,:focus,:active": {
+            transform: "scale(1.01)",
+            svg: {
+                transform: "scale(1.05)"
+            }
+        },
+
+        transition: "all ease-in-out 0.2s",
+    }
+}))
 export default function PantryAppShell({ links, activeRoute, children }) {
     const theme = useMantineTheme();
     const [opened, setOpened] = useState(false);
+    const {classes} = useStyles();
 
     const items = links.map((link) => (
         <NavLink
@@ -28,6 +47,7 @@ export default function PantryAppShell({ links, activeRoute, children }) {
             label={link.label}
             active={link.link === activeRoute}
             icon={<link.icon/>}
+            className={classes.navLink}
         />
     ));
 
@@ -57,16 +77,6 @@ export default function PantryAppShell({ links, activeRoute, children }) {
                     </Navbar.Section>
                 </Navbar>
             }
-            footer={
-                <Footer
-                    css={{
-                        textAlign: 'center'
-                    }}
-                    height={60} p="md"
-                >
-                    Copyright 2023 PantryPro.
-                </Footer>
-            }
             header={
                 <Header height={{ base: 50, md: 70 }} p="md">
                     <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
@@ -80,7 +90,7 @@ export default function PantryAppShell({ links, activeRoute, children }) {
                             />
                         </MediaQuery>
 
-                        <Text style={{ fontWeight: 800 }}>PantryPro</Text>
+                        <img src={`./logo.svg`} alt={`PantryPro`} height={32}/>
                     </div>
                 </Header>
             }

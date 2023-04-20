@@ -42,7 +42,7 @@ export default function PantryHome(){
 
 const PantryItem = ({item, onChange}) => {
     //TODO: date format, styling
-    const DEFAULT_IMAGE = 'public/food.jpg'
+    const DEFAULT_IMAGE = './food.jpg'
     const [quantity, setQuantity] = useInputState(item.quantity);
     const { getToken } = useAuth();
 

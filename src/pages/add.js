@@ -1,16 +1,19 @@
 import * as Yup from 'yup';
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useForm, yupResolver } from '@mantine/form';
 import { DateInput } from '@mantine/dates';
 import { TextInput, Box, Group, Button, FileButton } from '@mantine/core';
 import { useAuth } from "@clerk/nextjs";
 import { addPantry } from "@/modules/Data";
 import { useRouter } from "next/router";
+import Webcam from "react-webcam";
 
 
 
 export default function Add(){
     const [imageUpload, setImageUpload] = useState(null);
+    const [camUpload, setCamUpload] = useState(null);
+    const webcamRef = useRef(null);
 
     const schema = Yup.object().shape({
         name: Yup.string().required(),
@@ -28,7 +31,11 @@ export default function Add(){
         const token = await getToken({ template: "codehooks" });
         console.log(imageUpload)
 
-        vals.image = await convertBase64(imageUpload);
+        if(camUpload){
+            vals.image = camUpload;
+        } else if(imageUpload){
+            vals.image = await convertBase64(imageUpload);
+        }
         
         console.log(vals);
 
@@ -51,10 +58,32 @@ export default function Add(){
         })
       }
 
+      const videoConstraints = {
+        width: 120,
+        height: 120,
+        facingMode: "user"
+      };
+
+      {/* https://www.npmjs.com/package/react-webcam */}
+      const capture = useCallback(
+        () => {
+          setCamUpload(webcamRef.current.getScreenshot());
+          alert('photo taken')
+        },
+        [webcamRef]
+      );
     return(<>
         <Box maw={640} mx="auto">
             <h1>Enter product info</h1>
             <form onSubmit={form.onSubmit((values) => addItem(values))}>
+                <Webcam
+                    audio={false}
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                    videoConstraints={videoConstraints}
+                /><br />
+                
+                <Button onClick={capture}>Capture photo</Button>
                 <FileButton name="fileButton" onChange={setImageUpload} accept="image/png,image/jpeg,image/jpg">
                     {(props) => <Button {...props}>Upload image</Button>}
                 </FileButton>

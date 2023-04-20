@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useForm, yupResolver } from '@mantine/form';
 import { DateInput } from '@mantine/dates';
-import { TextInput, Box, Group, Button, FileButton } from '@mantine/core';
+import { TextInput, Box, Group, Button, FileButton, Image } from '@mantine/core';
 import { useAuth } from "@clerk/nextjs";
 import { addPantry } from "@/modules/Data";
 import { useRouter } from "next/router";
@@ -85,6 +85,7 @@ export default function Add(){
         },
         [webcamRef]
       );
+
     return(<>
         <Box maw={640} mx="auto">
             <h1>Enter product info</h1>
@@ -96,6 +97,9 @@ export default function Add(){
                     screenshotFormat="image/jpeg"
                     videoConstraints={videoConstraints}
                 /><br />
+                {imageSrc && (
+                    <Image src={imageSrc} width={200} height={200}></Image>
+                )}
 
                 <Button onClick={capture}>Capture photo</Button>
                 <FileButton name="fileButton" onChange={setImageUpload} accept="image/png,image/jpeg,image/jpg">

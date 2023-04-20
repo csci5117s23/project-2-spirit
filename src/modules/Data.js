@@ -35,3 +35,39 @@ export async function deletePantry(authToken, pantry){
     })
     return await result.json();
 }
+
+export async function getRecipeFromBook(authToken) {
+    const result = await fetch(base_url+"/recipeBook",{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    return await result.json();
+}
+
+export async function addRecipeToBook(authToken, recipe) {
+    const result = await fetch(base_url+"/recipeBook",{
+        'method':'POST',
+        'headers': {'Authorization': 'Bearer ' + authToken,
+        'Content-Type': 'application/json'},
+        'body': JSON.stringify(recipe)
+    })
+    return await result.json();
+}
+
+export async function updateRecipeBook(authToken, recipe){
+    const result = await fetch(base_url+"/recipeBook/"+recipe._id,{
+        'method':'PUT',
+        'headers': {'Authorization': 'Bearer ' + authToken,
+        'Content-Type': 'application/json'},
+        'body': JSON.stringify(recipe)
+    })
+    return await result.json();
+}
+
+export async function deleteRecipeBook(authToken, recipe){
+    const result = await fetch(base_url+"/recipeBook/"+recipe._id,{
+        'method':'DELETE',
+        'headers': {'Authorization': 'Bearer ' + authToken},
+    })
+    return await result.json();
+}

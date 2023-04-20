@@ -6,6 +6,10 @@ import {Alert, Badge, Card, Center, Container, Divider, List, Loader, Text} from
 import {IconAlertCircle} from "@tabler/icons-react";
 import PageContainer from "@/components/page/PageContainer";
 
+// import added for saving new recipes
+import { addRecipeToBook } from "@/modules/Data";
+import { useAuth } from "@clerk/nextjs";
+
 const WrapWithPage = (props) => {
     return (
         <PageContainer>
@@ -20,6 +24,19 @@ export default function WizardRecipeView() {
     const router = useRouter();
     const {recipe} = router.query
     const [wizardResponse, setResponse] = useState(null)
+
+    // const added for saving new recipes
+    const { getToken } = useAuth();
+
+    async function addNewRecipes(recipes){
+        const token = await getToken({ template: "codehooks" });
+
+        for (let i = 0; i < recipes.length; i++) {
+            const recipeToAdd = recipes[i];
+            await addRecipeToBook(token, recipeToAdd);
+        }
+
+    }
 
     useEffectWithAuth(async (authToken) => {
         getRecipes(authToken, recipe)
@@ -41,6 +58,7 @@ export default function WizardRecipeView() {
             return (<WrapWithPage><WizardRecipeError error={`No Recipes Found`}
                                        context={`Wizard did not come up with any recipes for that prompt with your given pantry ingredients. Please try again.`}/></WrapWithPage>)
         } else {
+            addNewRecipes(response.recipes);
             return (<WrapWithPage>{response.recipes.map((recipe, idx) => (
                 <Card key={idx}>
                     <Badge>{recipe.ingredientsInPantry ?? 0}/ {recipe.totalIngredients ?? 0} Ingredients in Pantry</Badge>

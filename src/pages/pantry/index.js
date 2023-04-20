@@ -117,16 +117,16 @@ const PantryList = ({items, onChange}) => {
     const categories = getCategories();
 
     return(<>
-    {categories.map(category => (<>
+    {categories.map(category => (<div key={category}>
         <h1>{category}</h1>
         <List listStyleType="none" spacing="sm">
             {items.filter(item => item.group == category).map(item => (
-               <List.Item>
+               <List.Item key={item._id}>
                 <PantryItem item={item} onChange={onChange}></PantryItem>
                </List.Item> 
                ))}
         </List>
-        </>
+        </div>
     ))}
     </>);
 }

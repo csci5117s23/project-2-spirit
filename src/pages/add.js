@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useForm, yupResolver } from '@mantine/form';
 import { DateInput } from '@mantine/dates';
 import { TextInput, Box, Group, Button, FileButton } from '@mantine/core';
@@ -12,8 +12,23 @@ import Webcam from "react-webcam";
 
 export default function Add(){
     const [imageUpload, setImageUpload] = useState(null);
-    const [camUpload, setCamUpload] = useState(null);
+    const [imageSrc, setImageSrc] = useState(null);
     const webcamRef = useRef(null);
+    const resetRef = useRef(null);
+
+    const clearImage = () => {
+        setImageSrc(null);
+        resetRef.current?.();
+    };
+
+    useEffect(() => {
+        async function processImage(){
+            if(imageUpload){
+                setImageSrc(await convertBase64(imageUpload));
+            }
+        }
+        processImage();
+    }, [imageUpload])
 
     const schema = Yup.object().shape({
         name: Yup.string().required(),
@@ -31,11 +46,9 @@ export default function Add(){
         const token = await getToken({ template: "codehooks" });
         console.log(imageUpload)
 
-        if(camUpload){
-            vals.image = camUpload;
-        } else if(imageUpload){
-            vals.image = await convertBase64(imageUpload);
-        }
+        if(imageSrc){
+            vals.image = imageSrc;
+        } 
         
         console.log(vals);
 
@@ -67,7 +80,7 @@ export default function Add(){
       {/* https://www.npmjs.com/package/react-webcam */}
       const capture = useCallback(
         () => {
-          setCamUpload(webcamRef.current.getScreenshot());
+          setImageSrc(webcamRef.current.getScreenshot());
           alert('photo taken')
         },
         [webcamRef]
@@ -76,17 +89,19 @@ export default function Add(){
         <Box maw={640} mx="auto">
             <h1>Enter product info</h1>
             <form onSubmit={form.onSubmit((values) => addItem(values))}>
+
                 <Webcam
                     audio={false}
                     ref={webcamRef}
                     screenshotFormat="image/jpeg"
                     videoConstraints={videoConstraints}
                 /><br />
-                
+
                 <Button onClick={capture}>Capture photo</Button>
                 <FileButton name="fileButton" onChange={setImageUpload} accept="image/png,image/jpeg,image/jpg">
                     {(props) => <Button {...props}>Upload image</Button>}
                 </FileButton>
+                <Button disabled={!imageSrc} color="red" onClick={clearImage}>Reset</Button>
                 <TextInput withAsterisk label="Name" placeholder="Name" {...form.getInputProps('name')} />
                 <TextInput withAsterisk label="Group" placeholder="Group" {...form.getInputProps('group')} />
                 <TextInput label="Quantity" placeholder="Quantity" {...form.getInputProps('quantity')} />

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import PageContainer from "@/components/page/PageContainer";
-import {Button, Container, Badge, TextInput, Card, List, Grid} from "@mantine/core";
+import {Button, Container, Badge, TextInput, Card, List, Grid, Image} from "@mantine/core";
 import {useEffectWithAuth} from "@/hook/useEffectWithAuth";
 import { useInputState } from '@mantine/hooks';
 import {useEffect, useState} from "react";
@@ -41,7 +41,8 @@ export default function PantryHome(){
 }
 
 const PantryItem = ({item, onChange}) => {
-    //TODO: image support, date format, styling
+    //TODO: date format, styling
+    const DEFAULT_IMAGE = 'public/food.jpg'
     const [quantity, setQuantity] = useInputState(item.quantity);
     const { getToken } = useAuth();
 
@@ -58,9 +59,13 @@ const PantryItem = ({item, onChange}) => {
         onChange(newList);
     }
 
+    if(item.image == null){
+        item.image = DEFAULT_IMAGE;
+    }
     return(<>
     <Container>
         <Card>
+            <Image src={item.image} width={200}></Image>
             <Grid grow>
                 <Grid.Col>
                     <h2

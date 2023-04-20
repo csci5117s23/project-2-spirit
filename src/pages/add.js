@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { useState } from "react";
 import { useForm, yupResolver } from '@mantine/form';
 import { DateInput } from '@mantine/dates';
-import { TextInput, Box, Group, Button } from '@mantine/core';
+import { TextInput, Box, Group, Button, FileButton } from '@mantine/core';
 import { useAuth } from "@clerk/nextjs";
 import { addPantry } from "@/modules/Data";
 import { useRouter } from "next/router";
@@ -10,11 +10,14 @@ import { useRouter } from "next/router";
 
 
 export default function Add(){
+    const [imageUpload, setImageUpload] = useState(null);
+
     const schema = Yup.object().shape({
         name: Yup.string().required(),
         group: Yup.string().required(),
         quantity: Yup.string(),
-        expiration: Yup.date()
+        expiration: Yup.date(),
+        image: Yup.string()
     });
 
     const form = useForm({ validate: yupResolver(schema), initialValues: { name: '', group: '', quantity: '', expiration: ''} });
@@ -23,16 +26,38 @@ export default function Add(){
 
     async function addItem(vals){
         const token = await getToken({ template: "codehooks" });
-        const newPantryItem = await addPantry(token, vals);
+        console.log(imageUpload)
+
+        vals.image = await convertBase64(imageUpload);
+        
         console.log(vals);
+
+        const newPantryItem = await addPantry(token, vals);
         router.push('/pantry');
 
     }
+
+    //source: https://stackoverflow.com/questions/36580196/reactjs-base64-file-upload
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.readAsDataURL(file)
+          fileReader.onload = () => {
+            resolve(fileReader.result);
+          }
+          fileReader.onerror = (error) => {
+            reject(error);
+          }
+        })
+      }
 
     return(<>
         <Box maw={640} mx="auto">
             <h1>Enter product info</h1>
             <form onSubmit={form.onSubmit((values) => addItem(values))}>
+                <FileButton name="fileButton" onChange={setImageUpload} accept="image/png,image/jpeg,image/jpg">
+                    {(props) => <Button {...props}>Upload image</Button>}
+                </FileButton>
                 <TextInput withAsterisk label="Name" placeholder="Name" {...form.getInputProps('name')} />
                 <TextInput withAsterisk label="Group" placeholder="Group" {...form.getInputProps('group')} />
                 <TextInput label="Quantity" placeholder="Quantity" {...form.getInputProps('quantity')} />

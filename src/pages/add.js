@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useForm, yupResolver } from '@mantine/form';
 import { DateInput } from '@mantine/dates';
-import { TextInput, Box, Group, Button, FileButton, Image } from '@mantine/core';
+import { TextInput, Box, Group, Button, FileButton, Image, Center } from '@mantine/core';
 import { useAuth } from "@clerk/nextjs";
 import { addPantry } from "@/modules/Data";
 import { useRouter } from "next/router";
@@ -88,21 +88,38 @@ export default function Add(){
       );
 
     return(<>
-        <Box maw={640} mx="auto">
-            <h1>Enter product info</h1>
+        <Box maw={640} mx="auto" sx={{ 
+            'h1, h2': {
+                textAlign: 'center'
+            },
+
+            'button': {
+                justifyContent: 'center',
+                marginLeft: '5px',
+                marginRight: '5px',
+                marginTop: '10px'
+            },
+
+            'img': {
+                marginBottom: '10px'
+            }
+
+            }}>
             <form onSubmit={form.onSubmit((values) => addItem(values))}>
+                <h1>Enter product info</h1>
                 {imageSrc && (<>
                     <h2>Current image:</h2>
-                    <Image src={imageSrc} width={200} height={200}></Image>
+                    <Image src={imageSrc} width={200} height={200} mx="auto"></Image>
                 </>)}
 
                 {webcam ? (<>
+                    <Center>
                     <Webcam
                     audio={false}
                     ref={webcamRef}
                     screenshotFormat="image/jpeg"
                     videoConstraints={videoConstraints}
-                    /><br />
+                    /></Center><br />
                     <Button onClick={capture}>Capture photo</Button>
                 </>) : (
                     <Button onClick={() => setWebcam(!webcam)}>Take picture</Button>

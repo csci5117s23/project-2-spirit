@@ -13,6 +13,7 @@ import Webcam from "react-webcam";
 export default function Add(){
     const [imageUpload, setImageUpload] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
+    const [webcam, setWebcam] = useState(false);
     const webcamRef = useRef(null);
     const resetRef = useRef(null);
 
@@ -81,7 +82,7 @@ export default function Add(){
       const capture = useCallback(
         () => {
           setImageSrc(webcamRef.current.getScreenshot());
-          alert('photo taken')
+          setWebcam(false);
         },
         [webcamRef]
       );
@@ -90,18 +91,23 @@ export default function Add(){
         <Box maw={640} mx="auto">
             <h1>Enter product info</h1>
             <form onSubmit={form.onSubmit((values) => addItem(values))}>
+                {imageSrc && (<>
+                    <h2>Current image:</h2>
+                    <Image src={imageSrc} width={200} height={200}></Image>
+                </>)}
 
-                <Webcam
+                {webcam ? (<>
+                    <Webcam
                     audio={false}
                     ref={webcamRef}
                     screenshotFormat="image/jpeg"
                     videoConstraints={videoConstraints}
-                /><br />
-                {imageSrc && (
-                    <Image src={imageSrc} width={200} height={200}></Image>
+                    /><br />
+                    <Button onClick={capture}>Capture photo</Button>
+                </>) : (
+                    <Button onClick={() => setWebcam(!webcam)}>Take picture</Button>
                 )}
 
-                <Button onClick={capture}>Capture photo</Button>
                 <FileButton name="fileButton" onChange={setImageUpload} accept="image/png,image/jpeg,image/jpg">
                     {(props) => <Button {...props}>Upload image</Button>}
                 </FileButton>

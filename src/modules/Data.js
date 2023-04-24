@@ -8,6 +8,17 @@ export async function getPantry(authToken) {
     return await result.json();
 }
 
+export async function getPantryById(authToken, id) {
+    const result = await fetch(base_url+"/pantry/"+id,{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    if(result.status == 403){
+        return 403;
+    }
+    return await result.json();
+}
+
 export async function addPantry(authToken, values) {
     const result = await fetch(base_url+"/pantry",{
         'method':'POST',

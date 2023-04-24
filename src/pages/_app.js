@@ -2,6 +2,7 @@ import '@/styles/globals.css'
 import { ClerkProvider } from '@clerk/nextjs';
 import {MantineProvider} from '@mantine/core';
 import Head from "next/head";
+import {pantryProTheme} from "@/styles/pantryProTheme";
 
 export default function App({Component, pageProps}) {
     return (
@@ -16,10 +17,7 @@ export default function App({Component, pageProps}) {
             <MantineProvider
                 withGlobalStyles
                 withNormalizeCSS
-                theme={{
-                    /** Put your mantine theme override here */
-                    colorScheme: 'light',
-                }}
+                theme={pantryProTheme}
             >
                 <Component {...pageProps} />
             </MantineProvider>

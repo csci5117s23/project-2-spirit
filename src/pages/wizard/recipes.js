@@ -1,10 +1,15 @@
+/** @jsxImportSource @emotion/react */
 import {useRouter} from "next/router";
 import {useState} from "react";
 import {useEffectWithAuth} from "@/hook/useEffectWithAuth";
 import {getRecipes} from "@/modules/Wizard";
-import {Alert, Card, Center, Container, Divider, List, Loader, Text} from "@mantine/core";
+import {Alert, Badge, Button, Card, Center, Container, Divider, List, Loader, Text} from "@mantine/core";
 import {IconAlertCircle} from "@tabler/icons-react";
 import PageContainer from "@/components/page/PageContainer";
+
+// import added for saving new recipes
+import { addRecipeToBook } from "@/modules/Data";
+import { useAuth } from "@clerk/nextjs";
 
 const WrapWithPage = (props) => {
     return (
@@ -20,6 +25,14 @@ export default function WizardRecipeView() {
     const router = useRouter();
     const {recipe} = router.query
     const [wizardResponse, setResponse] = useState(null)
+
+    // const added for saving new recipes
+    const { getToken } = useAuth();
+
+    async function addNewRecipe(recipe){
+        const token = await getToken({ template: "codehooks" });
+        await addRecipeToBook(token, recipe);
+    }
 
     useEffectWithAuth(async (authToken) => {
         getRecipes(authToken, recipe)
@@ -43,9 +56,10 @@ export default function WizardRecipeView() {
         } else {
             return (<WrapWithPage>{response.recipes.map((recipe, idx) => (
                 <Card key={idx}>
-                    <Text fz={`xl`} fw={800}>{recipe.name ?? "Unknown Recipe"}</Text>
+                    <Badge>{recipe.ingredientsInPantry ?? 0}/ {recipe.totalIngredients ?? 0} Ingredients in Pantry</Badge>
+                    <h1>{recipe.name ?? "Unknown Recipe"}</h1>
                     <Divider />
-                    <Text fz={`lg`} fw={600}>Ingredients</Text>
+                    <h2>Ingredients</h2>
                     {(recipe.ingredients && recipe.ingredients.length > 0) ?
                         (<List>
                                 {recipe.ingredients.map((ingredient, idx) => (
@@ -55,7 +69,7 @@ export default function WizardRecipeView() {
                             <Text>No ingredients needed</Text>
                         )
                     }
-                    <Text fz={`lg`} fw={600}>Ingredients</Text>
+                    <h2>Steps</h2>
                     {(recipe.steps && recipe.ingredients.length > 0) ?
                         (<List>
                             {recipe.steps.map((step, idx) => (
@@ -65,6 +79,14 @@ export default function WizardRecipeView() {
                             <Text>No steps needed</Text>
                         )
                     }
+                    <Button
+                        css={{
+                            marginTop: '1em'
+                        }}
+                        onClick={() => addNewRecipe(recipe)}
+                    >
+                        Save this Recipe
+                    </Button>
                 </Card>
 
             ))}</WrapWithPage>)
@@ -76,7 +98,8 @@ export default function WizardRecipeView() {
                     <Text>Please wait while we generate some recipe ideas. This may take a while depending on current
                         OpenAI
                         system load.</Text>
-                    <Loader/>
+                    <br />
+                    <Center><Loader /></Center>
             </WrapWithPage>
         )
     }

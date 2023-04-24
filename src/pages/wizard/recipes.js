@@ -32,7 +32,9 @@ export default function WizardRecipeView() {
 
     async function addNewRecipe(recipe){
         const token = await getToken({ template: "codehooks" });
-        await addRecipeToBook(token, recipe);
+        const recipeToSend = {name: recipe.name, ingredients: recipe.ingredients, steps: recipe.steps};
+
+        await addRecipeToBook(token, recipeToSend);
     }
 
     useEffectWithAuth(async (authToken) => {

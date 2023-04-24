@@ -10,6 +10,7 @@ import PageContainer from "@/components/page/PageContainer";
 // import added for saving new recipes
 import { addRecipeToBook } from "@/modules/Data";
 import { useAuth } from "@clerk/nextjs";
+import RecipeDetails from "@/components/recipe/RecipeDetails";
 
 const WrapWithPage = (props) => {
     return (
@@ -55,30 +56,16 @@ export default function WizardRecipeView() {
                                        context={`Wizard did not come up with any recipes for that prompt with your given pantry ingredients. Please try again.`}/></WrapWithPage>)
         } else {
             return (<WrapWithPage>{response.recipes.map((recipe, idx) => (
-                <Card key={idx}>
-                    <Badge>{recipe.ingredientsInPantry ?? 0}/ {recipe.totalIngredients ?? 0} Ingredients in Pantry</Badge>
-                    <h1>{recipe.name ?? "Unknown Recipe"}</h1>
-                    <Divider />
-                    <h2>Ingredients</h2>
-                    {(recipe.ingredients && recipe.ingredients.length > 0) ?
-                        (<List>
-                                {recipe.ingredients.map((ingredient, idx) => (
-                                    <List.Item key={idx}>{ingredient}</List.Item>
-                                ))}
-                        </List>) : (
-                            <Text>No ingredients needed</Text>
-                        )
-                    }
-                    <h2>Steps</h2>
-                    {(recipe.steps && recipe.ingredients.length > 0) ?
-                        (<List>
-                            {recipe.steps.map((step, idx) => (
-                                <List.Item key={idx}>{step}</List.Item>
-                            ))}
-                        </List>) : (
-                            <Text>No steps needed</Text>
-                        )
-                    }
+                <RecipeDetails
+                    key={idx}
+                    ingredientInfo={{
+                        ingredientsInPantry: recipe.ingredientsInPantry,
+                        totalIngredients: recipe.totalIngredients,
+                    }}
+                    recipeIngredients={recipe.ingredients}
+                    recipeSteps={recipe.steps}
+                    recipeName={recipe.name}
+                    >
                     <Button
                         css={{
                             marginTop: '1em'
@@ -87,8 +74,7 @@ export default function WizardRecipeView() {
                     >
                         Save this Recipe
                     </Button>
-                </Card>
-
+                </RecipeDetails>
             ))}</WrapWithPage>)
         }
     } else {

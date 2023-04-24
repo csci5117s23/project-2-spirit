@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import { deletePantry, getPantry, updatePantry } from "@/modules/Data";
 import { useAuth } from "@clerk/nextjs";
+import ExpirationComponent from "@/components/ExpirationComponent";
 
 export default function PantryHome(){
     const [pantryItems, setPantryItems] = useState([]);
@@ -89,7 +90,7 @@ const PantryItem = ({item, onChange}) => {
                     </Button>
                 </Grid.Col>
                 <Grid.Col>
-                    <h3>Expires on: {item.expiration}</h3>
+                    <ExpirationComponent isoTimestamp={item.expiration} />
                 </Grid.Col>
                 <Grid.Col>
                     <Button onClick={deleteItem}>Delete item</Button>

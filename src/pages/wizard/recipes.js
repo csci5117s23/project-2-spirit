@@ -1,10 +1,15 @@
+/** @jsxImportSource @emotion/react */
 import {useRouter} from "next/router";
 import {useState} from "react";
 import {useEffectWithAuth} from "@/hook/useEffectWithAuth";
 import {getRecipes} from "@/modules/Wizard";
-import {Alert, Badge, Card, Center, Container, Divider, List, Loader, Text} from "@mantine/core";
+import {Alert, Badge, Button, Card, Center, Container, Divider, List, Loader, Text} from "@mantine/core";
 import {IconAlertCircle} from "@tabler/icons-react";
 import PageContainer from "@/components/page/PageContainer";
+
+// import added for saving new recipes
+import { addRecipeToBook } from "@/modules/Data";
+import { useAuth } from "@clerk/nextjs";
 
 const WrapWithPage = (props) => {
     return (
@@ -20,6 +25,14 @@ export default function WizardRecipeView() {
     const router = useRouter();
     const {recipe} = router.query
     const [wizardResponse, setResponse] = useState(null)
+
+    // const added for saving new recipes
+    const { getToken } = useAuth();
+
+    async function addNewRecipe(recipe){
+        const token = await getToken({ template: "codehooks" });
+        await addRecipeToBook(token, recipe);
+    }
 
     useEffectWithAuth(async (authToken) => {
         getRecipes(authToken, recipe)
@@ -66,6 +79,14 @@ export default function WizardRecipeView() {
                             <Text>No steps needed</Text>
                         )
                     }
+                    <Button
+                        css={{
+                            marginTop: '1em'
+                        }}
+                        onClick={() => addNewRecipe(recipe)}
+                    >
+                        Save this Recipe
+                    </Button>
                 </Card>
 
             ))}</WrapWithPage>)

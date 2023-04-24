@@ -5,7 +5,7 @@
 */
 import {app} from 'codehooks-js'
 import {crudlify} from 'codehooks-crudlify'
-import { date, object, string} from 'yup';
+import { array, date, number, object, string} from 'yup';
 import {generateWizardResponse, Prompts} from "./wizard/wizard";
 import jwtDecode from 'jwt-decode';
 
@@ -20,6 +20,14 @@ const PantryYup = object({
   quantity: string(),
   expiration: date(),
   image: string(),
+  userId: string().required(),
+  createdOn: date().default(() => new Date()),
+});
+
+const RecipeBookYup = object({
+  name: string().required(),
+  ingredients: array().of(string()).required(),
+  steps: array().of(string()).required(),
   userId: string().required(),
   createdOn: date().default(() => new Date()),
 });
@@ -75,8 +83,17 @@ app.use('/pantry', (req, res, next) => {
   next();
 })
 
+app.use('/recipeBook', (req, res, next) => {
+  if (req.method === "POST") {
+      req.body.userId = req.user_token.sub
+  } else if (req.method === "GET") {
+      req.query.userId = req.user_token.sub
+  }
+  next();
+})
+
 // Use Crudlify to create a REST API for any collection
-crudlify(app, {pantry: PantryYup})
+crudlify(app, {pantry: PantryYup, recipeBook: RecipeBookYup})
 
 // bind to serverless runtime
 export default app.init();

@@ -62,7 +62,12 @@ const PantryItem = ({item, onChange}) => {
         item.image = DEFAULT_IMAGE;
     }
     return (<>
-        <Container>
+        <Container sx={{
+            'button': {
+                marginBottom: '10px',
+                marginTop: '10px'
+            }
+        }}>
             <Card>
                 <Grid grow columns={25} justify="center" align="center">
                     <Grid.Col span={4}>

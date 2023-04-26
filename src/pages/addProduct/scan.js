@@ -54,14 +54,9 @@ export default function Scan() {
     }
 
     const fetchData = async () => {
-        const response = await fetch("https://api.barcodelookup.com/v3/products", {
-            "mode" : "cors",
+        const response = await fetch("https://api.barcodelookup.com/dev/scan?content=" + content, {
             "method" : "GET",
-            "headers": {
-                "formatted": "y",
-                "barcode": content,
-                "key": process.env.BARCODE_LOOKUP_KEY,
-        }});
+        });
         // setResponse(response);
         const data = await response.json;
         console.log("test");

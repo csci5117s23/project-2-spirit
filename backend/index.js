@@ -75,15 +75,12 @@ app.get('/wizard/recipe', async (req, res) => {
 app.use(userAuth)
 
 app.get('/scan', async (req, res) => {
-  const response = await fetch("https://api.barcodelookup.com/v3/products", {
-    "mode" : "cors",
+  const url = "https://api.barcodelookup.com/v3/products?formatted=y&key=" + process.env.BARCODE_LOOKUP_KEY + "&barcode=" + req.query.content;
+  const response = await fetch(url, {
     "method" : "GET",
-    "headers": {
-        "formatted": "y",
-        "barcode": req.query.content,
-        "key": process.env.BARCODE_LOOKUP_KEY,
-  }});
-  res.json(response);
+  });
+  const json = await response.json();
+  res.json(json);
 })
 
 app.use('/pantry', (req, res, next) => {

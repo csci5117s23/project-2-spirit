@@ -36,7 +36,7 @@ const antiHarmContext = `If the recipe prompt or ingredients are offensive, not 
  * @param attempts? The current number of attempts, if applicable
  * @returns {Promise<{error: string}|any>} The wizard's response to this prompt. This will contain the "error" property if there was an error in handling the request.
  */
-export async function generateWizardResponse({prompt}, message, attempts=0) {
+export async function generateWizardResponse({prompt}, message, attempts = 0) {
     try {
         const completion = await openai.createChatCompletion({
             messages: [{
@@ -47,13 +47,13 @@ export async function generateWizardResponse({prompt}, message, attempts=0) {
         })
         const response = completion.data.choices[0].message;
         if (!response) {
-            return {error: "Unable to reach Wizard at this time."}
+            return {response: {error: "Unable to reach Wizard at this time."}}
         }
         const content = response.content
         try {
             return {response: JSON.parse(content)}
         } catch (error) {
-            return {error: `Unable to parse Wizard response: ${error}`}
+            return {response: {error: `Unable to parse Wizard response: ${error}`}}
         }
     } catch (error) {
         if (error.response) {
@@ -73,9 +73,9 @@ export async function generateWizardResponse({prompt}, message, attempts=0) {
                 return generateWizardResponse(prompt, message, attempts);
             }
 
-            return {error: `Unhandled error in network response (code ${error.response.status})`}
+            return {response: {error: `Unhandled error in network response (code ${error.response.status})`}}
         } else {
-            return {error: `OpenAI error: ${error}`}
+            return {response: {error: `OpenAI error: ${error}`}}
         }
     }
 }
@@ -95,7 +95,10 @@ export class Prompts {
             
             Please respond with a JSON object of the form:
             {
-                categories: string[]
+                categories: {
+                    name: string,
+                    description: string
+                }
             }
             
             If it is not possible to suggest some categories of recipe the user might want to try, you should
@@ -142,7 +145,8 @@ export class Prompts {
             
             where totalIngredients is the total number of ingredients in the recipe and ingredientsInPantry is the number
             of ingredients in the recipe the user currently has in their ingredients array. If ingredients are empty, simply
-            generate a recipe based on the recipe field prompt regardless of the ingredients the user has.
+            generate a recipe based on the recipe field prompt regardless of the ingredients the user has. The recipes do
+            not necessarily need to use the entire amount of an ingredient the user has.
             
             If the ingredients are provided and it is not possible to suggest some recipes based on the user's ingredients, 
             you should instead respond with a JSON object of the following form:

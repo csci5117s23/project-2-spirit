@@ -1,10 +1,16 @@
+/** @jsxImportSource @emotion/react */
 import {useRouter} from "next/router";
 import {useState} from "react";
 import {useEffectWithAuth} from "@/hook/useEffectWithAuth";
 import {getRecipes} from "@/modules/Wizard";
-import {Alert, Card, Center, Container, Divider, List, Loader, Text} from "@mantine/core";
+import {Alert, Badge, Button, Card, Center, Container, Divider, List, Loader, Text} from "@mantine/core";
 import {IconAlertCircle} from "@tabler/icons-react";
 import PageContainer from "@/components/page/PageContainer";
+
+// import added for saving new recipes
+import { addRecipeToBook } from "@/modules/Data";
+import { useAuth } from "@clerk/nextjs";
+import RecipeDetails from "@/components/recipe/RecipeDetails";
 
 const WrapWithPage = (props) => {
     return (
@@ -20,6 +26,16 @@ export default function WizardRecipeView() {
     const router = useRouter();
     const {recipe} = router.query
     const [wizardResponse, setResponse] = useState(null)
+
+    // const added for saving new recipes
+    const { getToken } = useAuth();
+
+    async function addNewRecipe(recipe){
+        const token = await getToken({ template: "codehooks" });
+        const recipeToSend = {name: recipe.name, ingredients: recipe.ingredients, steps: recipe.steps};
+
+        await addRecipeToBook(token, recipeToSend);
+    }
 
     useEffectWithAuth(async (authToken) => {
         getRecipes(authToken, recipe)
@@ -42,31 +58,25 @@ export default function WizardRecipeView() {
                                        context={`Wizard did not come up with any recipes for that prompt with your given pantry ingredients. Please try again.`}/></WrapWithPage>)
         } else {
             return (<WrapWithPage>{response.recipes.map((recipe, idx) => (
-                <Card key={idx}>
-                    <Text fz={`xl`} fw={800}>{recipe.name ?? "Unknown Recipe"}</Text>
-                    <Divider />
-                    <Text fz={`lg`} fw={600}>Ingredients</Text>
-                    {(recipe.ingredients && recipe.ingredients.length > 0) ?
-                        (<List>
-                                {recipe.ingredients.map((ingredient, idx) => (
-                                    <List.Item key={idx}>{ingredient}</List.Item>
-                                ))}
-                        </List>) : (
-                            <Text>No ingredients needed</Text>
-                        )
-                    }
-                    <Text fz={`lg`} fw={600}>Ingredients</Text>
-                    {(recipe.steps && recipe.ingredients.length > 0) ?
-                        (<List>
-                            {recipe.steps.map((step, idx) => (
-                                <List.Item key={idx}>{step}</List.Item>
-                            ))}
-                        </List>) : (
-                            <Text>No steps needed</Text>
-                        )
-                    }
-                </Card>
-
+                <RecipeDetails
+                    key={idx}
+                    ingredientInfo={{
+                        ingredientsInPantry: recipe.ingredientsInPantry,
+                        totalIngredients: recipe.totalIngredients,
+                    }}
+                    recipeIngredients={recipe.ingredients}
+                    recipeSteps={recipe.steps}
+                    recipeName={recipe.name}
+                    >
+                    <Button
+                        css={{
+                            marginTop: '1em'
+                        }}
+                        onClick={() => addNewRecipe(recipe)}
+                    >
+                        Save this Recipe
+                    </Button>
+                </RecipeDetails>
             ))}</WrapWithPage>)
         }
     } else {
@@ -76,7 +86,8 @@ export default function WizardRecipeView() {
                     <Text>Please wait while we generate some recipe ideas. This may take a while depending on current
                         OpenAI
                         system load.</Text>
-                    <Loader/>
+                    <br />
+                    <Center><Loader /></Center>
             </WrapWithPage>
         )
     }

@@ -9,15 +9,42 @@ import {
     Text,
     MediaQuery,
     Burger,
-    useMantineTheme, NavLink, Button, Center,
+    useMantineTheme, NavLink, Button, Center, createStyles,
 } from '@mantine/core';
 import Link from "next/link";
 import {SignedIn, SignedOut, SignInButton, UserButton, UserProfile} from "@clerk/nextjs";
 
+const appShellStyles = createStyles((theme) => ({
+    UserButton: {
+        '.cl-userButtonBox': {
+            flexDirection: 'row-reverse',
+        }
+    },
+
+    navLink: {
+        svg: {
+            color: theme.colors["brandPrimary"][darkMode(theme) ? 1 : 9]
+        },
+        fontWeight: 600,
+
+        "&:hover,:focus,:active": {
+            transform: "scale(1.01)",
+            svg: {
+                transform: "scale(1.05)"
+            }
+        },
+
+        transition: "all ease-in-out 0.2s",
+    }
+}));
+
 // Source: https://mantine.dev/core/app-shell/
+
+const darkMode = (theme) => theme.colorScheme === "dark"
 
 export default function PantryAppShell({ links, activeRoute, children }) {
     const theme = useMantineTheme();
+    const { classes } = appShellStyles(theme);
     const [opened, setOpened] = useState(false);
 
     const items = links.map((link) => (
@@ -28,6 +55,7 @@ export default function PantryAppShell({ links, activeRoute, children }) {
             label={link.label}
             active={link.link === activeRoute}
             icon={<link.icon/>}
+            className={classes.navLink}
         />
     ));
 
@@ -48,7 +76,9 @@ export default function PantryAppShell({ links, activeRoute, children }) {
                     <Navbar.Section>
                         <Center>
                         <SignedIn>
-                            <UserButton showName={true}/>
+                            <div className={classes.UserButton}>
+                                <UserButton showName={true}/>
+                            </div>
                         </SignedIn>
                         <SignedOut>
                             <Button component={SignInButton}>Sign In</Button>
@@ -56,16 +86,6 @@ export default function PantryAppShell({ links, activeRoute, children }) {
                         </Center>
                     </Navbar.Section>
                 </Navbar>
-            }
-            footer={
-                <Footer
-                    css={{
-                        textAlign: 'center'
-                    }}
-                    height={60} p="md"
-                >
-                    Copyright 2023 PantryPro.
-                </Footer>
             }
             header={
                 <Header height={{ base: 50, md: 70 }} p="md">
@@ -80,7 +100,7 @@ export default function PantryAppShell({ links, activeRoute, children }) {
                             />
                         </MediaQuery>
 
-                        <Text style={{ fontWeight: 800 }}>PantryPro</Text>
+                        <img src={`/logo.svg`} alt={`PantryPro`} height={32}/>
                     </div>
                 </Header>
             }

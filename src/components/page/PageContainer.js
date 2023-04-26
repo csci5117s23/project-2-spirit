@@ -23,14 +23,14 @@ export default function PageContainer(props) {
 
     return (
         <>
+            <SignedOut>
+                <RedirectToSignIn />
+            </SignedOut>
             <SignedIn>
                 <PantryAppShell links={navLinks} activeRoute={active}>
                     {props.children}
                 </PantryAppShell>
             </SignedIn>
-            <SignedOut>
-                <RedirectToSignIn />
-            </SignedOut>
         </>
     )
 }

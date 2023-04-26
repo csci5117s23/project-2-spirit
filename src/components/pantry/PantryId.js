@@ -57,6 +57,7 @@ export default function PantryId({item}){
         if(imageSrc != null){
             item.image = imageSrc;
         }
+        item.name = name;
         item.quantity = quantity;
         item.expiration = expiration;
         const updated = await updatePantry(token, item);

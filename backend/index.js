@@ -58,7 +58,7 @@ app.use(async (req, res, next) => {
 
 app.get('/wizard/categories', async (req, res) => {
     if (!req.query.ingredients) {
-        res.json({error: "No ingredients prompt provided."})
+        res.json({response: {error: "No ingredients prompt provided."}})
     } else {
         const response = await generateWizardResponse(Prompts.recommendCategories(), {
             ingredients: req.query.ingredients,

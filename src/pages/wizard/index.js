@@ -47,9 +47,9 @@ export default function WizardHome() {
 
 const WizardCategoryRecommendation = ({response}) => {
     if (response) {
-        if (response.error || (response.response && response.response.error)) {
-            const errorMessage = response.response ? response.response.error : response.error
-            const context = response.response ? response.response.context : response.context
+        if (response.response && response.response.error) {
+            const errorMessage = response.response.error ?? "Unknown Error"
+            const context = response.response.context ?? "an unexpected error occurred. Please check your pantry for non-food ingredients."
             if (errorMessage === "No ingredients prompt provided.") {
                 // User has no ingredients in their pantry
                 return (
@@ -67,9 +67,9 @@ const WizardCategoryRecommendation = ({response}) => {
             } else {
                 return (
                     <Center>
-                        <Alert icon={<IconExclamationCircle size="1rem"/>} title={errorMessage ?? "Unknown Error"}
+                        <Alert icon={<IconExclamationCircle size="1rem"/>} title={errorMessage}
                                color="red">
-                            Unable to generate recipe suggestions from your pantry: {context ?? "n unexpected error occurred. Please check your pantry for non-food ingredients."}
+                            Unable to generate recipe suggestions from your pantry: {context}
                         </Alert>
                     </Center>
                 )

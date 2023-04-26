@@ -9,6 +9,7 @@ export default function Scan() {
     const [cameraId, changeCamera] = useState(null);
     const [content, changeContent] = useState(null);
     const [responseValue, setResponse] = useState(null);
+    const [width, setWidth] = useState(600);
 
     useEffect(() => {
         Html5Qrcode.getCameras().then(devices => {
@@ -24,6 +25,7 @@ export default function Scan() {
           }).catch(err => {
             // handle err
           });        
+        setWidth(window.innerWidth);
     }, [])
 
     if(cameraId) {
@@ -32,7 +34,7 @@ export default function Scan() {
         cameraId, 
         {
             fps: 10,    // Optional, frame per seconds for qr code scanning
-            qrbox: { width: 250, height: 250 }  // Optional, if you want bounded box UI
+            qrbox: { width: 200, height: 200 }  // Optional, if you want bounded box UI
         },
         (decodedText, decodedResult) => {
             // do something when code is read
@@ -53,12 +55,12 @@ export default function Scan() {
 
     const fetchData = async () => {
         const response = await fetch("https://api.barcodelookup.com/v3/products", {
-            "mode": "no-cors",
+            "mode" : "cors",
             "method" : "GET",
             "headers": {
                 "formatted": "y",
                 "barcode": content,
-                "key": "gq2hop3d54a3a3y6018l3mq6gi0a1n",
+                "key": process.env.BARCODE_LOOKUP_KEY,
         }});
         // setResponse(response);
         const data = await response.json;
@@ -68,7 +70,7 @@ export default function Scan() {
 
     return (<>
         {!content && <>
-            <div id="reader" style={{width: "600px"}}></div>
+            <div id="reader" style={{width: "100vw"}}></div>
             <select name="devices" id="devices" onChange={() => changeCamera(document.getElementById("devices").value)}>
                 {Object.values(devicesArray).map(value => {
                     return <option key={value.label} value={value.id}>{value.label}</option>

@@ -74,6 +74,18 @@ app.get('/wizard/recipe', async (req, res) => {
 }
 app.use(userAuth)
 
+app.get('/scan', async (req, res) => {
+  const response = await fetch("https://api.barcodelookup.com/v3/products", {
+    "mode" : "cors",
+    "method" : "GET",
+    "headers": {
+        "formatted": "y",
+        "barcode": req.query.content,
+        "key": process.env.BARCODE_LOOKUP_KEY,
+  }});
+  res.json(response);
+})
+
 app.use('/pantry', (req, res, next) => {
   if (req.method === "POST") {
       req.body.userId = req.user_token.sub

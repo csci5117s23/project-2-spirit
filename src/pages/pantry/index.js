@@ -9,6 +9,7 @@ import {deletePantry, getPantry, updatePantry} from "@/modules/Data";
 import {useAuth} from "@clerk/nextjs";
 import ExpirationComponent from "@/components/ExpirationComponent";
 
+
 export default function PantryHome() {
     const [pantryItems, setPantryItems] = useState([]);
     const router = useRouter();
@@ -42,6 +43,7 @@ const PantryItem = ({item, onChange}) => {
     const DEFAULT_IMAGE = './food.jpg'
     const [quantity, setQuantity] = useInputState(item.quantity);
     const {getToken} = useAuth();
+    const router = useRouter();
 
     async function update() {
         const token = await getToken({template: "codehooks"});
@@ -60,36 +62,29 @@ const PantryItem = ({item, onChange}) => {
         item.image = DEFAULT_IMAGE;
     }
     return (<>
-        <Container>
+        <Container sx={{
+            'button': {
+                marginBottom: '10px',
+                marginTop: '10px'
+            }
+        }}>
             <Card>
-                <Image src={item.image} width={200}></Image>
-                <Grid grow>
-                    <Grid.Col>
-                        <h2
-                            css={{
-                                marginBottom: '0em'
-                            }}
-                        >
-                            {item.name}
-                        </h2>
-                        <Badge>{item.group}</Badge>
+                <Grid grow columns={25} justify="center" align="center">
+                    <Grid.Col span={4}>
+                        <Image src={item.image} width={100}></Image>
                     </Grid.Col>
-                    <Grid.Col>
-                        <TextInput label="Quantity" value={quantity} onChange={setQuantity}/>
-                        <Button
-                            css={{
-                                marginTop: '1em'
-                            }}
-                            onClick={update}
-                        >
-                            Save
-                        </Button>
+                    <Grid.Col span={4}>
+                        <h2>{item.name}</h2>
                     </Grid.Col>
-                    <Grid.Col>
+                    <Grid.Col span={3}>
+                        <h2>{item.quantity}</h2>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
                         <ExpirationComponent isoTimestamp={item.expiration}/>
                     </Grid.Col>
-                    <Grid.Col>
+                    <Grid.Col span={5}>
                         <Button onClick={deleteItem}>Delete item</Button>
+                        <Button onClick={() => router.push('/pantry/' + item._id)}>Edit Item</Button>
                     </Grid.Col>
                 </Grid>
             </Card>

@@ -36,7 +36,7 @@ const antiHarmContext = `If the recipe prompt or ingredients are offensive, not 
  * @param attempts? The current number of attempts, if applicable
  * @returns {Promise<{error: string}|any>} The wizard's response to this prompt. This will contain the "error" property if there was an error in handling the request.
  */
-export async function generateWizardResponse({prompt}, message, attempts=0) {
+export async function generateWizardResponse({prompt}, message, attempts = 0) {
     try {
         const completion = await openai.createChatCompletion({
             messages: [{
@@ -47,13 +47,13 @@ export async function generateWizardResponse({prompt}, message, attempts=0) {
         })
         const response = completion.data.choices[0].message;
         if (!response) {
-            return {error: "Unable to reach Wizard at this time."}
+            return {response: {error: "Unable to reach Wizard at this time."}}
         }
         const content = response.content
         try {
             return {response: JSON.parse(content)}
         } catch (error) {
-            return {error: `Unable to parse Wizard response: ${error}`}
+            return {response: {error: `Unable to parse Wizard response: ${error}`}}
         }
     } catch (error) {
         if (error.response) {
@@ -73,9 +73,9 @@ export async function generateWizardResponse({prompt}, message, attempts=0) {
                 return generateWizardResponse(prompt, message, attempts);
             }
 
-            return {error: `Unhandled error in network response (code ${error.response.status})`}
+            return {response: {error: `Unhandled error in network response (code ${error.response.status})`}}
         } else {
-            return {error: `OpenAI error: ${error}`}
+            return {response: {error: `OpenAI error: ${error}`}}
         }
     }
 }

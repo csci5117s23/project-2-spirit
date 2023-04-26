@@ -100,7 +100,7 @@ export default function PantryAppShell({ links, activeRoute, children }) {
                             />
                         </MediaQuery>
 
-                        <img src={`./logo.svg`} alt={`PantryPro`} height={32}/>
+                        <img src={`/logo.svg`} alt={`PantryPro`} height={32}/>
                     </div>
                 </Header>
             }

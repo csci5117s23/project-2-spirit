@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import PageContainer from "@/components/page/PageContainer";
-import {Button, Container, Badge, TextInput, Card, List, Grid, Image, Loader} from "@mantine/core";
+import {Button, Container, Badge, TextInput, Card, List, Grid, Image, Loader, Center} from "@mantine/core";
 import {useEffectWithAuth} from "@/hook/useEffectWithAuth";
 import {useInputState} from '@mantine/hooks';
 import {useEffect, useState} from "react";
@@ -8,7 +8,7 @@ import {useRouter} from "next/router";
 import {deletePantry, getPantry, updatePantry} from "@/modules/Data";
 import {useAuth} from "@clerk/nextjs";
 import ExpirationComponent from "@/components/ExpirationComponent";
-import {IconCross, IconPencil, IconTrashFilled} from "@tabler/icons-react";
+import {IconCross, IconPencil, IconPlus, IconTrashFilled} from "@tabler/icons-react";
 
 
 export default function PantryHome() {
@@ -30,10 +30,13 @@ export default function PantryHome() {
     return (<><PageContainer>
         <Container>
             {pantryItems ? (<>
-                    <h1>Your pantry</h1>
-                <Button onClick={() => router.push('/add')}>Add item to pantry</Button>
-                <PantryList items={pantryItems} onChange={onChange}></PantryList></>
-            ) : <Loader />}
+                    <h1>Your Pantry</h1>
+                    <Center>
+                        <Button leftIcon={<IconPlus/>} color="green" size="xl" onClick={() => router.push('/add')}>New
+                            Item</Button>
+                    </Center>
+                    <PantryList items={pantryItems} onChange={onChange}></PantryList></>
+            ) : <Loader/>}
         </Container>
     </PageContainer></>);
 
@@ -88,8 +91,10 @@ const PantryItem = ({item, onChange}) => {
                             width: "100%"
                         }
                     }}>
-                        <Button leftIcon={<IconPencil />} onClick={() => router.push('/pantry/' + item._id)} color="yellow">Edit Item</Button>
-                        <Button leftIcon={<IconTrashFilled/>} onClick={deleteItem} variant="outlined" color="red">Delete item</Button>
+                        <Button leftIcon={<IconPencil/>} onClick={() => router.push('/pantry/' + item._id)}
+                                color="yellow">Edit Item</Button>
+                        <Button leftIcon={<IconTrashFilled/>} onClick={deleteItem} variant="outlined" color="red">Delete
+                            item</Button>
                     </Grid.Col>
                 </Grid>
             </Card>

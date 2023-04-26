@@ -31,7 +31,7 @@ const RecipeBookYup = object({
     createdOn: date().default(() => new Date()),
 });
 
-const WIZARD_RATE_LIMIT_PER_MIN = 3 // TODO: Raise this substantially during the demo to avoid embarrassment
+const WIZARD_RATE_LIMIT_PER_MIN = 69_420 // TODO: Lower this after the demo to avoid going broke from exorbitantly priced OpenAI calls
 
 function shouldRateLimit(path) {
     return path.includes("/wizard")

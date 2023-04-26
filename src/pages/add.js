@@ -24,6 +24,12 @@ export default function Add(){
     };
 
     useEffect(() => {
+        if(localStorage.getItem("productImage") != null){
+            setImageSrc(localStorage.getItem("productImage"));
+        }
+    }, []);
+    
+    useEffect(() => {
         async function processImage(){
             if(imageUpload){
                 setImageSrc(await convertBase64(imageUpload));

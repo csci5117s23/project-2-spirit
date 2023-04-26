@@ -1,10 +1,4 @@
-import {useEffect, useState} from "react";
-import {
-    IconMoodConfuzedFilled,
-    IconMoodEmptyFilled,
-    IconMoodHappyFilled,
-    IconMoodNeutralFilled
-} from "@tabler/icons-react";
+import {IconMoodConfuzedFilled, IconMoodEmptyFilled, IconMoodHappyFilled} from "@tabler/icons-react";
 import {Card, createStyles, Tooltip} from "@mantine/core";
 import {getRelativeTime} from "@/util/dateFormat";
 

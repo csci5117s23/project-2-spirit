@@ -7,6 +7,7 @@ import {crudlify} from 'codehooks-crudlify'
 import {array, date, number, object, string} from 'yup';
 import {generateWizardResponse, Prompts} from "./wizard/wizard";
 import jwtDecode from 'jwt-decode';
+import fetch from "node-fetch";
 
 // test route for https://<PROJECTID>.api.codehooks.io/dev/
 app.get('/', (req, res) => {

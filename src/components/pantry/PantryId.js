@@ -1,4 +1,4 @@
-import { Card, TextInput, Image, Button } from "@mantine/core";
+import { Card, TextInput, Image, Button, Badge } from "@mantine/core";
 import {useInputState} from '@mantine/hooks';
 import { updatePantry, deletePantry } from "@/modules/Data";
 import { useState, useEffect } from "react";
@@ -42,6 +42,7 @@ export default function PantryId({item}){
     return(<><Card>
                 <Image src={item.image} width={200}/>
                 <h1>{item.name}</h1>
+                <Badge>{item.group}</Badge>
                 <TextInput label="Quantity" value={quantity} onChange={setQuantity} />
                 <DateInput label="Expiration" value={expiration} valueFormat="YYYY-MM-DD" onChange={setExpiration} /><br />
                 <Button onClick={update}>Save</Button>

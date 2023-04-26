@@ -8,6 +8,7 @@ import {useRouter} from "next/router";
 import {deletePantry, getPantry, updatePantry} from "@/modules/Data";
 import {useAuth} from "@clerk/nextjs";
 import ExpirationComponent from "@/components/ExpirationComponent";
+import {IconCross, IconPencil, IconTrashFilled} from "@tabler/icons-react";
 
 
 export default function PantryHome() {
@@ -82,9 +83,13 @@ const PantryItem = ({item, onChange}) => {
                     <Grid.Col span={6}>
                         <ExpirationComponent isoTimestamp={item.expiration}/>
                     </Grid.Col>
-                    <Grid.Col span={5}>
-                        <Button onClick={deleteItem}>Delete item</Button>
-                        <Button onClick={() => router.push('/pantry/' + item._id)}>Edit Item</Button>
+                    <Grid.Col span={5} sx={{
+                        "& button": {
+                            width: "100%"
+                        }
+                    }}>
+                        <Button leftIcon={<IconPencil />} onClick={() => router.push('/pantry/' + item._id)} color="yellow">Edit Item</Button>
+                        <Button leftIcon={<IconTrashFilled/>} onClick={deleteItem} variant="outlined" color="red">Delete item</Button>
                     </Grid.Col>
                 </Grid>
             </Card>
@@ -113,7 +118,11 @@ const PantryList = ({items, onChange}) => {
                 <h1>{category}</h1>
                 <List listStyleType="none" spacing="sm">
                     {items.filter(item => item.group == category).map(item => (
-                        <List.Item key={item._id}>
+                        <List.Item key={item._id} sx={{
+                            "& .___ref-itemWrapper": {
+                                width: "100%"
+                            }
+                        }}>
                             <PantryItem item={item} onChange={onChange}></PantryItem>
                         </List.Item>
                     ))}

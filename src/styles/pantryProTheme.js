@@ -54,12 +54,12 @@ export const pantryProTheme = {
         Button: {
             styles: (theme, params, {variant}) => ({
                 root: {
-                    color: params.color ? "inherit" : theme.colors["brandPrimary"][9],
-                    backgroundColor: params.color ? "inherit" : theme.colors["brandSecondary"][1],
+                    color:theme.colors[params.color ?? "brandPrimary"][9],
+                    backgroundColor: theme.colors[params.color ?? "brandSecondary"][1],
                     '&:hover,:focus,:active': {
-                        backgroundColor: params.color ? "inherit" : theme.colors["brandSecondary"][0]
+                        backgroundColor: theme.colors[params.color ?? "brandSecondary"][0]
                     },
-                    border: `1px solid ${theme.colors["brandSecondary"][2]}`
+                    border: `1px solid ${theme.colors[params.color ?? "brandSecondary"][5]}`
                 },
             }),
         },

@@ -8,7 +8,7 @@ import { DateInput } from "@mantine/dates";
 import Webcam from "react-webcam";
 
 export default function PantryId({item}){
-    const DEFAULT_IMAGE = './food.jpg'
+    const DEFAULT_IMAGE = '/food.jpg'
     const [imageUpload, setImageUpload] = useState(null);
     const [imageSrc, setImageSrc] = useState(item.image);
     const [webcam, setWebcam] = useState(false);

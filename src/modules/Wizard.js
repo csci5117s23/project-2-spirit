@@ -1,7 +1,7 @@
 import {getPantry} from "@/modules/Data";
 import {generateWizardResponse, Prompts} from "../../backend/wizard/wizard";
 
-const base_url = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+const base_url = process.env.NEXT_PUBLIC_API_ENDPOINT_BASE;
 
 const authHeader = (authToken) => ({'Authorization': 'Bearer ' + authToken})
 const fullUrl = (relativePath) => `${base_url}${relativePath}`

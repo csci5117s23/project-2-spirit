@@ -1,4 +1,4 @@
-const base_url= process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+const base_url= process.env.NEXT_PUBLIC_API_ENDPOINT_BASE;
 
 export async function getPantry(authToken) {
     const result = await fetch(base_url+"/pantry",{

@@ -36,7 +36,7 @@ export async function deletePantry(authToken, pantry){
     return await result.json();
 }
 
-export async function getRecipesFromBook(authToken) {
+export async function getRecipeBook(authToken) {
     const result = await fetch(base_url+"/recipeBook",{
         'method':'GET',
         'headers': {'Authorization': 'Bearer ' + authToken}

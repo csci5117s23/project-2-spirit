@@ -54,12 +54,13 @@ export default function Scan() {
     }
 
     const fetchData = async () => {
-        const response = await fetch("https://api.barcodelookup.com/dev/scan?content=" + content, {
+        const response = await fetch("https://project2-hxgl.api.codehooks.io/dev/scan?content=" + content, {
             "method" : "GET",
+            "headers": {"x-apikey": process.env.NEXT_PUBLIC_API_KEY}
         });
         // setResponse(response);
-        const data = await response.json;
-        console.log("test");
+        console.log(process.env);
+        const data = await response.json();
         console.log(data);
     };
 

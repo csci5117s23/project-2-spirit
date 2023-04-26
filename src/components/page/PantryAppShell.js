@@ -1,18 +1,19 @@
 /** @jsxImportSource @emotion/react */
-import { useState } from 'react';
+import {useState} from 'react';
 import {
     AppShell,
-    Navbar,
-    Header,
-    Footer,
-    Aside,
-    Text,
-    MediaQuery,
     Burger,
-    useMantineTheme, NavLink, Button, Center, createStyles,
+    Button,
+    Center,
+    createStyles,
+    Header,
+    MediaQuery,
+    Navbar,
+    NavLink,
+    useMantineTheme,
 } from '@mantine/core';
 import Link from "next/link";
-import {SignedIn, SignedOut, SignInButton, UserButton, UserProfile} from "@clerk/nextjs";
+import {SignedIn, SignedOut, SignInButton, UserButton} from "@clerk/nextjs";
 
 const appShellStyles = createStyles((theme) => ({
     UserButton: {

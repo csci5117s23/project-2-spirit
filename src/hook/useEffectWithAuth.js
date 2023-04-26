@@ -5,9 +5,9 @@ export function useEffectWithAuth(closure) {
     const {isLoaded, userId, getToken} = useAuth();
     useEffect(() => {
         const callback = async () => {
-            if(isLoaded && userId != null) {
+            if (isLoaded && userId != null) {
                 const token = await getToken();
-                if(token) {
+                if (token) {
                     await closure(token)
                 }
             }

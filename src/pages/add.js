@@ -17,7 +17,6 @@ export default function Add(){
     const [imageSrc, setImageSrc] = useState(null);
     const [webcam, setWebcam] = useState(false);
     const [scanner, setScanner] = useState(false);
-    const [scannedContent, setContent] = useState(null);
     const webcamRef = useRef(null);
     const resetRef = useRef(null);
 

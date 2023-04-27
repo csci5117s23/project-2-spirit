@@ -59,9 +59,8 @@ export default function Scan() {
             "headers": {"x-apikey": process.env.NEXT_PUBLIC_API_KEY}
         });
         // setResponse(response);
-        console.log(process.env);
         const data = await response.json();
-        console.log(data);
+        console.log(data.products[0]);
     };
 
     return (<>

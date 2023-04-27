@@ -100,7 +100,7 @@ const userAuth = async (req, res, next) => {
 app.use(userAuth)
 
 app.get('/scan', async (req, res) => {
-  const url = "https://api.barcodelookup.com/v3/products?formatted=y&key=" + process.env.BARCODE_LOOKUP_KEY + "&barcode=" + req.query.content;
+  const url = "https://api.barcodelookup.com/v3/products?&key=" + process.env.BARCODE_LOOKUP_KEY + "&barcode=" + req.query.content;
   const response = await fetch(url, {
     "method" : "GET",
   });

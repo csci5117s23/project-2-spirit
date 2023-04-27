@@ -7,6 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import { addPantry } from "@/modules/Data";
 import { useRouter } from "next/router";
 import Webcam from "react-webcam";
+import PageContainer from "@/components/page/PageContainer";
 
 
 
@@ -22,6 +23,12 @@ export default function Add(){
         resetRef.current?.();
     };
 
+    useEffect(() => {
+        if(localStorage.getItem("productImage") != null){
+            setImageSrc(localStorage.getItem("productImage"));
+        }
+    }, []);
+    
     useEffect(() => {
         async function processImage(){
             if(imageUpload){
@@ -73,9 +80,9 @@ export default function Add(){
       }
 
       const videoConstraints = {
-        width: 120,
-        height: 120,
-        facingMode: "user"
+        width: 200,
+        height: 200,
+        facingMode: "environment"
       };
 
       {/* https://www.npmjs.com/package/react-webcam */}
@@ -88,6 +95,7 @@ export default function Add(){
       );
 
     return(<>
+    <PageContainer>
         <Box maw={640} mx="auto" sx={{ 
             'h1, h2': {
                 textAlign: 'center'
@@ -138,5 +146,6 @@ export default function Add(){
                 </Group>
             </form> 
         </Box>
+    </PageContainer>
     </>);
 }

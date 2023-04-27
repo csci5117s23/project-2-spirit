@@ -1,4 +1,4 @@
-import {Badge, Button, Card, Divider, List, Text} from "@mantine/core";
+import {Badge, Card, Divider, List, Text} from "@mantine/core";
 
 
 export default function RecipeDetails({ ingredientInfo, recipeName, recipeIngredients, recipeSteps, children }) {

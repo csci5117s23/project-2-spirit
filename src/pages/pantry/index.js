@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import PageContainer from "@/components/page/PageContainer";
-import {Button, Container, Badge, TextInput, Card, List, Grid, Image, Loader} from "@mantine/core";
+import {Button, Container, Badge, TextInput, Card, List, Grid, Image, Loader, Center} from "@mantine/core";
 import {useEffectWithAuth} from "@/hook/useEffectWithAuth";
 import {useInputState} from '@mantine/hooks';
 import {useEffect, useState} from "react";
@@ -8,6 +8,8 @@ import {useRouter} from "next/router";
 import {deletePantry, getPantry, updatePantry} from "@/modules/Data";
 import {useAuth} from "@clerk/nextjs";
 import ExpirationComponent from "@/components/ExpirationComponent";
+import {IconCross, IconPencil, IconPlus, IconTrashFilled} from "@tabler/icons-react";
+
 
 export default function PantryHome() {
     const [pantryItems, setPantryItems] = useState([]);
@@ -28,10 +30,13 @@ export default function PantryHome() {
     return (<><PageContainer>
         <Container>
             {pantryItems ? (<>
-                    <h1>Your pantry</h1>
-                <Button onClick={() => router.push('/add')}>Add item to pantry</Button>
-                <PantryList items={pantryItems} onChange={onChange}></PantryList></>
-            ) : <Loader />}
+                    <h1>Your Pantry</h1>
+                    <Center>
+                        <Button leftIcon={<IconPlus/>} color="green" size="xl" onClick={() => router.push('/add')}>New
+                            Item</Button>
+                    </Center>
+                    <PantryList items={pantryItems} onChange={onChange}></PantryList></>
+            ) : <Loader/>}
         </Container>
     </PageContainer></>);
 
@@ -42,6 +47,7 @@ const PantryItem = ({item, onChange}) => {
     const DEFAULT_IMAGE = './food.jpg'
     const [quantity, setQuantity] = useInputState(item.quantity);
     const {getToken} = useAuth();
+    const router = useRouter();
 
     async function update() {
         const token = await getToken({template: "codehooks"});
@@ -60,36 +66,35 @@ const PantryItem = ({item, onChange}) => {
         item.image = DEFAULT_IMAGE;
     }
     return (<>
-        <Container>
+        <Container sx={{
+            'button': {
+                marginBottom: '10px',
+                marginTop: '10px'
+            }
+        }}>
             <Card>
-                <Image src={item.image} width={200}></Image>
-                <Grid grow>
-                    <Grid.Col>
-                        <h2
-                            css={{
-                                marginBottom: '0em'
-                            }}
-                        >
-                            {item.name}
-                        </h2>
-                        <Badge>{item.group}</Badge>
+                <Grid grow columns={25} justify="center" align="center">
+                    <Grid.Col span={4}>
+                        <Image src={item.image} width={100}></Image>
                     </Grid.Col>
-                    <Grid.Col>
-                        <TextInput label="Quantity" value={quantity} onChange={setQuantity}/>
-                        <Button
-                            css={{
-                                marginTop: '1em'
-                            }}
-                            onClick={update}
-                        >
-                            Save
-                        </Button>
+                    <Grid.Col span={4}>
+                        <h2>{item.name}</h2>
                     </Grid.Col>
-                    <Grid.Col>
+                    <Grid.Col span={3}>
+                        <h2>{item.quantity}</h2>
+                    </Grid.Col>
+                    <Grid.Col span={6}>
                         <ExpirationComponent isoTimestamp={item.expiration}/>
                     </Grid.Col>
-                    <Grid.Col>
-                        <Button onClick={deleteItem}>Delete item</Button>
+                    <Grid.Col span={5} sx={{
+                        "& button": {
+                            width: "100%"
+                        }
+                    }}>
+                        <Button leftIcon={<IconPencil/>} onClick={() => router.push('/pantry/' + item._id)}
+                                color="yellow">Edit Item</Button>
+                        <Button leftIcon={<IconTrashFilled/>} onClick={deleteItem} variant="outlined" color="red">Delete
+                            item</Button>
                     </Grid.Col>
                 </Grid>
             </Card>
@@ -118,7 +123,11 @@ const PantryList = ({items, onChange}) => {
                 <h1>{category}</h1>
                 <List listStyleType="none" spacing="sm">
                     {items.filter(item => item.group == category).map(item => (
-                        <List.Item key={item._id}>
+                        <List.Item key={item._id} sx={{
+                            "& .___ref-itemWrapper": {
+                                width: "100%"
+                            }
+                        }}>
                             <PantryItem item={item} onChange={onChange}></PantryItem>
                         </List.Item>
                     ))}

@@ -117,6 +117,24 @@ app.use('/pantry', (req, res, next) => {
     next();
 })
 
+app.use('/pantry/:id', async (req, res, next) => {
+  const id = req.params.ID;
+  const userId = req.user_token.sub
+  const conn = await Datastore.open();
+  try {
+      const doc = await conn.getOne('pantry', id)
+      if (doc.userId != userId) {
+          res.status(403).end();
+          return
+      }
+  } catch (e) {
+      console.log(e);
+      res.status(404).end(e);
+      return;
+  }
+  next();
+})
+
 app.use('/recipeBook', (req, res, next) => {
     if (req.method === "POST") {
         req.body.userId = req.user_token.sub

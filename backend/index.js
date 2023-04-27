@@ -7,6 +7,7 @@ import {crudlify} from 'codehooks-crudlify'
 import {array, date, number, object, string} from 'yup';
 import {generateWizardResponse, Prompts} from "./wizard/wizard";
 import jwtDecode from 'jwt-decode';
+import fetch from "node-fetch";
 
 // test route for https://<PROJECTID>.api.codehooks.io/dev/
 app.get('/', (req, res) => {
@@ -97,6 +98,15 @@ const userAuth = async (req, res, next) => {
     }
 }
 app.use(userAuth)
+
+app.get('/scan', async (req, res) => {
+  const url = "https://api.barcodelookup.com/v3/products?&key=" + process.env.BARCODE_LOOKUP_KEY + "&barcode=" + req.query.content;
+  const response = await fetch(url, {
+    "method" : "GET",
+  });
+  const json = await response.json();
+  res.json(json);
+})
 
 app.use('/pantry', (req, res, next) => {
     if (req.method === "POST") {

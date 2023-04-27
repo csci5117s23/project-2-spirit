@@ -7,6 +7,7 @@ import { useAuth } from "@clerk/nextjs";
 import { addPantry } from "@/modules/Data";
 import { useRouter } from "next/router";
 import Webcam from "react-webcam";
+import {Html5Qrcode} from "html5-qrcode";
 import PageContainer from "@/components/page/PageContainer";
 
 
@@ -15,6 +16,7 @@ export default function Add(){
     const [imageUpload, setImageUpload] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
     const [webcam, setWebcam] = useState(false);
+    const [scanner, setScanner] = useState(false);
     const webcamRef = useRef(null);
     const resetRef = useRef(null);
 
@@ -23,11 +25,39 @@ export default function Add(){
         resetRef.current?.();
     };
 
+    function changeScanner(bool) {
+        if(bool) {
+            document.getElementById("reader").style.display = "block";
+        } else {
+            document.getElementById("reader").style.display = "none";
+        }
+        setScanner(bool);
+    }
+
+    const config = {fps: 10, qrbox: { width: 200, height: 200 }};
+    let html5QrCode;
     useEffect(() => {
         if(localStorage.getItem("productImage") != null){
             setImageSrc(localStorage.getItem("productImage"));
         }
     }, []);
+
+    useEffect(() => {
+        if(scanner) {
+            if(!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+            html5QrCode.start({facingMode: "environment"}, config, qrCodeSuccessCallback);
+        } else {
+            if(html5QrCode) {
+                html5QrCode.stop().then((ignore) => {
+                    // QR Code scanning is stopped.
+                  }).catch((err) => {
+                    throw err; // Stop failed, handle it.
+                  });
+            }
+        }
+    }, [scanner]);
     
     useEffect(() => {
         async function processImage(){
@@ -77,22 +107,40 @@ export default function Add(){
             reject(error);
           }
         })
-      }
+    }
 
-      const videoConstraints = {
-        width: 200,
-        height: 200,
-        facingMode: "environment"
-      };
+    const videoConstraints = {
+    width: 200,
+    height: 200,
+    facingMode: "environment"
+    };
 
-      {/* https://www.npmjs.com/package/react-webcam */}
-      const capture = useCallback(
-        () => {
-          setImageSrc(webcamRef.current.getScreenshot());
-          setWebcam(false);
-        },
-        [webcamRef]
-      );
+    {/* https://www.npmjs.com/package/react-webcam */}
+    const capture = useCallback(
+    () => {
+        setImageSrc(webcamRef.current.getScreenshot());
+        setWebcam(false);
+    },
+    [webcamRef]
+    );
+
+    const qrCodeSuccessCallback = async (decodedText, decodedResult) => {
+        html5QrCode.stop().then((ignore) => {
+            // QR Code scanning is stopped.
+          }).catch((err) => {
+            throw err; // Stop failed, handle it.
+          });
+        html5QrCode = null;
+        changeScanner(false);
+        const response = await fetch("https://project2-hxgl.api.codehooks.io/dev/scan?content=" + decodedText, {
+            "method" : "GET",
+            "headers": {"x-apikey": process.env.NEXT_PUBLIC_API_KEY}
+        });
+        const json = (await response.json()).products[0];
+        document.getElementById("Name").value = json.title;
+        const split = json.category.split(" > ");
+        document.getElementById("Group").value = split[split.length-1];;
+    };    
 
     return(<>
     <PageContainer>
@@ -115,6 +163,7 @@ export default function Add(){
             }}>
             <form onSubmit={form.onSubmit((values) => addItem(values))}>
                 <h1>Enter product info</h1>
+                <div id="reader"></div>
                 {imageSrc && (<>
                     <h2>Current image:</h2>
                     <Image src={imageSrc} width={200} height={200} mx="auto"></Image>
@@ -130,15 +179,20 @@ export default function Add(){
                     /></Center><br />
                     <Button onClick={capture}>Capture photo</Button>
                 </>) : (
-                    <Button onClick={() => setWebcam(!webcam)}>Take picture</Button>
+                    <Button onClick={() => {setWebcam(!webcam); changeScanner(false)}}>Take picture</Button>
                 )}
+
 
                 <FileButton name="fileButton" onChange={setImageUpload} accept="image/png,image/jpeg,image/jpg">
                     {(props) => <Button {...props}>Upload image</Button>}
                 </FileButton>
+                
+                
+                <Button onClick={() => {setWebcam(false); changeScanner(!scanner)}}>Scan in product</Button>
+
                 <Button disabled={!imageSrc} color="red" onClick={clearImage}>Reset</Button>
-                <TextInput withAsterisk label="Name" placeholder="Name" {...form.getInputProps('name')} />
-                <TextInput withAsterisk label="Group" placeholder="Group" {...form.getInputProps('group')} />
+                <TextInput withAsterisk id="Name" label="Name" placeholder="Name" {...form.getInputProps('name')} />
+                <TextInput withAsterisk id="Group" label="Group" placeholder="Group" {...form.getInputProps('group')} />
                 <TextInput label="Quantity" placeholder="Quantity" {...form.getInputProps('quantity')} />
                 <DateInput label="Expiration Date" placeholder="Expires on" valueFormat="YYYY-MM-DD" {...form.getInputProps('expiration')} />
                 <Group position="center" mt="md">

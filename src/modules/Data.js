@@ -55,6 +55,17 @@ export async function getRecipeBook(authToken) {
     return await result.json();
 }
 
+export async function getRecipeById(authToken, id) {
+    const result = await fetch(base_url+"/recipeBook/"+id,{
+        'method':'GET',
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
+    if(result.status == 403){
+        return 403;
+    }
+    return await result.json();
+}
+
 export async function addRecipeToBook(authToken, recipe) {
     const result = await fetch(base_url+"/recipeBook",{
         'method':'POST',
@@ -75,7 +86,7 @@ export async function updateRecipeBook(authToken, recipe){
     return await result.json();
 }
 
-export async function deleteRecipeBook(authToken, recipe){
+export async function deleteRecipe(authToken, recipe){
     const result = await fetch(base_url+"/recipeBook/"+recipe._id,{
         'method':'DELETE',
         'headers': {'Authorization': 'Bearer ' + authToken},

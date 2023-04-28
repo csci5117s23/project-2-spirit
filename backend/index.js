@@ -144,6 +144,24 @@ app.use('/recipeBook', (req, res, next) => {
     next();
 })
 
+app.use('/recipeBook/:id', async (req, res, next) => {
+    const id = req.params.ID;
+    const userId = req.user_token.sub
+    const conn = await Datastore.open();
+    try {
+        const doc = await conn.getOne('recipeBook', id)
+        if (doc.userId != userId) {
+            res.status(403).end();
+            return
+        }
+    } catch (e) {
+        console.log(e);
+        res.status(404).end(e);
+        return;
+    }
+    next();
+})
+
 // Use Crudlify to create a REST API for any collection
 crudlify(app, {pantry: PantryYup, recipeBook: RecipeBookYup})
 

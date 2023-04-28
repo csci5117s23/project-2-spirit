@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import PageContainer from "@/components/page/PageContainer";
-import {Button, Container, Badge, TextInput, Card, List, Grid, Image} from "@mantine/core";
-import {useEffectWithAuth} from "@/hook/useEffectWithAuth";
-import { useInputState } from '@mantine/hooks';
-import {useEffect, useState} from "react";
-import {useRouter} from "next/router";
-import { deletePantry, getPantry, updatePantry, getRecipeBook} from "@/modules/Data";
+import { Button, Container, Card, List, Grid } from "@mantine/core";
+import { useEffectWithAuth } from "@/hook/useEffectWithAuth";
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { getRecipeBook, deleteRecipe } from "@/modules/Data";
 import { useAuth } from "@clerk/nextjs";
-import ExpirationComponent from "@/components/ExpirationComponent";
+import { IconTrashFilled } from "@tabler/icons-react";
+
 
 export default function recipeBook(){
     const [recipeItems, setRecipeItems] = useState([]);
@@ -43,19 +43,46 @@ export default function recipeBook(){
 }
 
 const RecipeItem = ({item, onChange}) => {
+    const {getToken} = useAuth();
+    const router = useRouter();
+
+    async function deleteItem() {
+        const token = await getToken({template: "codehooks"});
+        await deleteRecipe(token, item);
+        const newList = await getRecipeBook(token);
+        onChange(newList);
+    }
 
     return(<>
-    <Container>
+    <Container sx={{
+        'button': {
+            marginBottom: '10px',
+            marginTop: '10px'
+        }
+    }}>
         <Card>
-            <Grid grow>
-                <Grid.Col>
-                    <h2
-                        css={{
-                            verticalAlign: 'middle'
-                        }}
-                    >
-                        {item.name}
-                    </h2>
+            <Grid grow columns={20} justify="center" align="center">
+                <Grid.Col span={10} onClick={() => router.push('/recipes/' + item._id)} sx={{
+                    "& h2": {
+                        cursor: "pointer"
+                    }
+                }}>
+                    <h2>{item.name}</h2>
+                </Grid.Col>
+                <Grid.Col span={5} sx={{
+                    "& h3": {
+                        whiteSpace: "nowrap"
+                    }
+                }}>
+                    <h3>Ingredients: {item.ingredients.length}</h3>
+                    <h3>Steps: {item.steps.length}</h3>
+                </Grid.Col>
+                <Grid.Col span={5} sx={{
+                    "& button": {
+                        width: "100%"
+                    }
+                }}>
+                    <Button leftIcon={<IconTrashFilled/>} onClick={deleteItem} variant="outlined" color="red">Delete Recipe</Button>
                 </Grid.Col>
             </Grid>
         </Card>
@@ -69,7 +96,11 @@ const RecipeList = ({items, onChange}) => {
             <div>
                 <List listStyleType="none" spacing="sm">
                     {items.map(item => (
-                    <List.Item key={item._id}>
+                    <List.Item key={item._id} sx={{
+                        "& .___ref-itemWrapper": {
+                            width: "100%"
+                        }
+                    }}>
                         <RecipeItem item={item} onChange={onChange}></RecipeItem>
                     </List.Item> 
                     ))}

@@ -8,7 +8,7 @@ import {useRouter} from "next/router";
 import {deletePantry, getPantry, updatePantry} from "@/modules/Data";
 import {useAuth} from "@clerk/nextjs";
 import ExpirationComponent from "@/components/ExpirationComponent";
-import {IconCross, IconPencil, IconPlus, IconTrashFilled} from "@tabler/icons-react";
+import {IconCross, IconPencil, IconPlus, IconTemperatureMinus, IconTrashFilled} from "@tabler/icons-react";
 
 
 export default function PantryHome() {
@@ -83,9 +83,12 @@ const PantryItem = ({item, onChange}) => {
                     <Grid.Col span={3}>
                         <h2>{item.quantity}</h2>
                     </Grid.Col>
-                    <Grid.Col span={6}>
-                        <ExpirationComponent isoTimestamp={item.expiration}/>
-                    </Grid.Col>
+                    {(item.expiration != null) && (
+                        <Grid.Col span={6}>
+                            <ExpirationComponent isoTimestamp={item.expiration}/>
+                        </Grid.Col>
+                    )}
+                    
                     <Grid.Col span={5} sx={{
                         "& button": {
                             width: "100%"

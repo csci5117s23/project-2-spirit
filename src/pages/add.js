@@ -76,7 +76,7 @@ export default function Add(){
         image: Yup.string()
     });
 
-    const form = useForm({ validate: yupResolver(schema), initialValues: { name: '', group: '', quantity: '', expiration: ''} });
+    const form = useForm({ validate: yupResolver(schema), initialValues: { name: '', group: '', quantity: ''} });
     const { userId, getToken } = useAuth();
     const router = useRouter();
 
@@ -195,7 +195,7 @@ export default function Add(){
                 <TextInput withAsterisk id="Name" label="Name" placeholder="Name" {...form.getInputProps('name')} />
                 <TextInput withAsterisk id="Group" label="Group" placeholder="Group" {...form.getInputProps('group')} />
                 <TextInput label="Quantity" placeholder="Quantity" {...form.getInputProps('quantity')} />
-                <DateInput label="Expiration Date" placeholder="Expires on" valueFormat="YYYY-MM-DD" {...form.getInputProps('expiration')} />
+                <DateInput minDate={new Date()} label="Expiration Date" placeholder="Expires on" valueFormat="YYYY-MM-DD" {...form.getInputProps('expiration')} />
                 <Group position="center" mt="md">
                     <Button type="submit">Add product</Button>
                 </Group>

@@ -71,7 +71,7 @@ app.get('/wizard/categories', async (req, res) => {
 
 app.get('/wizard/recipe', async (req, res) => {
     if (!req.query.recipe) {
-        res.json({error: "No recipe prompt provided"})
+        res.json({response: {error: "No recipe prompt provided"}})
     } else {
         const message = {
             ingredients: req.query.ingredients ?? [],

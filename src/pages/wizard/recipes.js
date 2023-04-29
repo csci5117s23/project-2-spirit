@@ -38,7 +38,7 @@ export default function WizardRecipeView() {
     }
 
     useEffectWithAuth(async (authToken) => {
-        getRecipes(authToken, recipe)
+        getRecipes(authToken, recipe ?? "Surprise me")
             .then((wizardResponse) => {
                 console.log("Wizard response is ", wizardResponse)
                 setResponse(wizardResponse)

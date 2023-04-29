@@ -137,8 +137,10 @@ export default function Add(){
             "headers": {"x-apikey": process.env.NEXT_PUBLIC_API_KEY}
         });
         const json = (await response.json()).products[0];
+        //document.getElementById("Name").value = json.title;
         const split = json.category.split(" > ");
-        form.setValues({name: json.title, group: split[split.length-1]});
+        //document.getElementById("Group").value = split[split.length-1];;
+        form.setValues({ name: json.title, group: split[split.length-1] });
     };    
 
     return(<>

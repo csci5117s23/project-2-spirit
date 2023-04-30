@@ -35,6 +35,7 @@ export default function WizardRecipeView() {
         const recipeToSend = {name: recipe.name, ingredients: recipe.ingredients, steps: recipe.steps};
 
         await addRecipeToBook(token, recipeToSend);
+        router.push('/recipes');
     }
 
     useEffectWithAuth(async (authToken) => {

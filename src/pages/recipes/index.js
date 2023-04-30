@@ -36,21 +36,11 @@ export default function recipeBook() {
             </> : <>
                 <Container>
                     <h1>Your Recipe Book</h1>
-                    {/* Todo: Page for manually adding new recipes*/}
-                    {/* <Button onClick={() => router.push('/addRecipe')}>Add a new recipe</Button> */}
                     <RecipeList items={recipeItems} onChange={onChange}></RecipeList>
                 </Container>
             </>}
         </PageContainer>
     </>
-
-    if (loading) {
-        return (<><span>Loading...</span></>);
-    } else {
-        return (<><PageContainer>
-        </PageContainer></>);
-    }
-
 }
 
 const RecipeItem = ({item, onChange}) => {

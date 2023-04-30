@@ -61,11 +61,6 @@ export default function PantryId({item}){
         item.quantity = quantity;
         item.expiration = expiration;
         const updated = await updatePantry(token, item);
-    }
-
-    async function deleteItem() {
-        const token = await getToken({template: "codehooks"});
-        const deleted = await deletePantry(token, item);
         router.push('/pantry');
     }
 

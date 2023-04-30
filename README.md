@@ -96,7 +96,7 @@ Clicking on new recipe will bring the user to an empty recipe view with inline e
 * All of the functionality for recommendations are using OpenAI. While we have error handling in place, if there is an outage or degraded usability with OpenAI's services, this will result in an experience much different than what we had in place while testing.
   * Additionally, although there are safety guards in place for generating recipes and the assistant will refuse to use ingredients which could be unsafe, the best user experience comes from adding *normal* food ingredients that a legitimate user would have, as otherwise the assistant may refuse to generate recipes based on these safety guards.
 * The barcode scanning API has a very limited number of uses on the free tier. We have put a fresh API key on after demo day, but if for some reason a rate-limit is reached, we can replace the key with a new one.
-
+* When testing on mobile, Firefox/Chrome iOS depending on the version may not support the capture functionality the barcode scanning library uses. If this is not working, it may be due to this.
 
 
 ## Screenshots of Site (complete)

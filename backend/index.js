@@ -61,8 +61,9 @@ app.get('/wizard/categories', async (req, res) => {
     if (!req.query.ingredients) {
         res.json({response: {error: "No ingredients prompt provided."}})
     } else {
+        console.log("Ingredients are ", req.query.ingredients?.split(",") ?? [])
         const response = await generateWizardResponse(Prompts.recommendCategories(), {
-            ingredients: req.query.ingredients,
+            ingredients: req.query.ingredients?.split(",") ?? [],
         })
         console.log("Response to category suggestions is ", response)
         res.json(response)
@@ -74,9 +75,10 @@ app.get('/wizard/recipe', async (req, res) => {
         res.json({response: {error: "No recipe prompt provided"}})
     } else {
         const message = {
-            ingredients: req.query.ingredients ?? [],
+            ingredients: req.query.ingredients?.split(",") ?? [],
             recipe: req.query.recipe,
         }
+        console.log("Ingredients are ", message.ingredients)
         console.log("User is requesting with message ", message)
         const response = await generateWizardResponse(Prompts.recommendRecipe(), message)
         console.log("GPT response is ", response)

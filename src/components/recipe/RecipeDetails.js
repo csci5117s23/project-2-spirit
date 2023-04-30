@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import {Badge, Card, Divider, List, Text} from "@mantine/core";
 
 
@@ -22,7 +23,12 @@ export default function RecipeDetails({ ingredientInfo, recipeName, recipeIngred
             {(recipeSteps && recipeSteps.length > 0) ?
                 (<List>
                     {recipeSteps.map((step, idx) => (
-                        <List.Item key={idx}>{step}</List.Item>
+                        <List.Item key={idx} sx={{
+                            "& .___ref-itemWrapper": {
+                                marginRight: "2em",
+                                marginBottom: "1em"
+                            }
+                        }}>{step}</List.Item>
                     ))}
                 </List>) : (
                     <Text>No steps needed</Text>

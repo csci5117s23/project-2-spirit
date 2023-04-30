@@ -103,7 +103,8 @@ const RecipeItem = ({item, onChange}) => {
 }
 
 const RecipeList = ({items, onChange}) => {
-    return (items.size > 0 ?
+    console.log(items);
+    return (items.length > 0 ?
             <>
                 <div>
                     <List listStyleType="none" spacing="sm">

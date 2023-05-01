@@ -13,7 +13,7 @@ CSCI 5117, Spring 2022, [assignment description](https://canvas.umn.edu/courses/
 * Runqiu Guo, guo00370@umn.edu
 * Daniel Kong, kong0150@umn.edu
 * Matthew Letellier, letel005@umn.edu
-* Matt Yokanovich, yokan013@umn.eduz
+* Matt Yokanovich, yokan013@umn.edu
 
 
 ## Key Features

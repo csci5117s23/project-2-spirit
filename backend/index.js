@@ -67,7 +67,7 @@ app.get('/wizard/categories', async (req, res) => {
     } else {
         console.log("Ingredients are ", req.query.ingredients?.split(",") ?? [])
         const response = await generateWizardResponse(Prompts.recommendCategories(), {
-            ingredients: req.query.ingredients?.split(",") ?? [],
+            ingredients: req.query.ingredients?.split(",") ?? "",
         })
         console.log("Response to category suggestions is ", response)
         res.json(response)
@@ -79,7 +79,7 @@ app.get('/wizard/recipe', async (req, res) => {
         res.json({response: {error: "No recipe prompt provided"}})
     } else {
         const message = {
-            ingredients: req.query.ingredients?.split(",") ?? [],
+            ingredients: req.query.ingredients?.split(",") ?? "",
             recipe: req.query.recipe,
         }
         console.log("Ingredients are ", message.ingredients)

@@ -153,7 +153,7 @@ export class Prompts {
             }
             
             where totalIngredients is the total number of ingredients in the recipe and ingredientsInPantry is the number
-            of ingredients in the recipe the user currently has in their ingredients array. If ingredients are empty, simply
+            of ingredients in the recipe the user currently has in their ingredients array. If ingredients are empty or invalid, simply
             generate a recipe based on the recipe field prompt regardless of the ingredients the user has. The recipes do
             not necessarily need to use the entire amount of an ingredient the user has.
             

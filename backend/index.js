@@ -45,6 +45,7 @@ app.use(async (req, res, next) => {
         console.log("Path ", req.path, " is exempt from rate limit")
         return next()
     }
+    console.log("Checking rate limit for req ", req)
     const db = await Datastore.open()
     const ip = req.headers['x-real-ip']
     // increment times IP has visited
@@ -53,12 +54,15 @@ app.use(async (req, res, next) => {
     if ((count?.val ?? 0) > WIZARD_RATE_LIMIT_PER_MIN) {
         res.json({ response: {error: "Rate limit reached", context: "You've sent too many requests to the Recipe Wizard recently. Please wait one minute."}})
     } else {
+        console.log("Req ", req, " passed rate limit")
         next()
     }
 })
 
 app.get('/wizard/categories', async (req, res) => {
+    console.log("Wizard categories with req ", req)
     if (!req.query.ingredients) {
+        console.log("Missing ingredients")
         res.json({response: {error: "No ingredients prompt provided."}})
     } else {
         console.log("Ingredients are ", req.query.ingredients?.split(",") ?? [])
@@ -88,14 +92,18 @@ app.get('/wizard/recipe', async (req, res) => {
 
 const userAuth = async (req, res, next) => {
     try {
+        console.log("Checking auth for req ", req)
         const {authorization} = req.headers;
         if (authorization) {
             const token = authorization.replace('Bearer ', '');
+            console.log("Authorization is ", token)
             const token_parsed = jwtDecode(token);
+            console.log("Parsed token is ", token_parsed)
             req.user_token = token_parsed;
         }
         next();
     } catch (error) {
+        console.log("User auth failed for req ", req)
         next(error);
     }
 }

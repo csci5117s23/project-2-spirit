@@ -29,7 +29,9 @@ export async function getCategories(authToken) {
     console.log("User's ingredients are ", ingredients)
     const response = await fetch(fullUrl("/wizard/categories?") + new URLSearchParams({
         ingredients: ingredients
-    }))
+    }), {
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
     const json = await response.json()
     console.log("Response is ", json)
     return json
@@ -42,7 +44,9 @@ export async function getRecipes(authToken, recipePrompt) {
     const response = await fetch(fullUrl("/wizard/recipe?") + new URLSearchParams({
         ingredients: ingredients,
         recipe: recipePrompt
-    }))
+    }), {
+        'headers': {'Authorization': 'Bearer ' + authToken}
+    })
     const json = await response.json()
     console.log("Response is ", json)
     return json

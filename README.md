@@ -104,8 +104,46 @@ Clicking on new recipe will bring the user to an empty recipe view with inline e
 **[Add a screenshot of each key page](https://stackoverflow.com/questions/10189356/how-to-add-screenshot-to-readmes-in-github-repository)
 along with a very brief caption:**
 
-![](https://media.giphy.com/media/o0vwzuFwCGAFO/giphy.gif)
+### Navbar
 
+This is the navbar which can be expanded on mobile or appears on the side of the page.
+
+![](screenshots/navbar.png)
+
+### Pantry View
+
+This is where the user's pantry items are shown. They are grouped by category (user-definable) and show the name of the product, the quantity, the expiration indicator (if there is an expiration date set), and the ability to edit and/or delete each entry.
+
+![](screenshots/pantry-view-with-products.png)
+
+### Product Add Page
+
+This is the form where the user can add a new item to their pantry. They can use the "Scan product" feature to scan the barcode and auto-fill information, or can enter details manually. There is image capture and uploading so the user can take a picture of the item or upload one if they have one saved or do not have a camera available.
+
+![](screenshots/product-add-details.png)
+
+
+### Recipe Wizard - Homepage
+
+This is the page where the user goes to discover recommended recipe categories or enter their own. If they have ingredients in their pantry and OpenAI can generate category recommendations, they will show and can be clicked on to generate a recipe similar to the suggestion.
+
+If the user does not have ingredients in their pantry or wants something else, they can still submit their own prompt to generate a recipe for.
+
+![](screenshots/wizard-no-recommendations.png)
+![](screenshots/wizard-recommendations.png)
+
+### Recipe Wizard - Recipe
+
+When the user clicks on a suggestion or searches, after communicating and receiving a response from OpenAI, the recipe is rendered. The user can save a recipe to their "Recipe Book" if they wish to have it accessible in the future.
+
+![](screenshots/wizard-loading.png)
+![](screenshots/wizard-recipe-with-save.png)
+
+### Recipe Book
+
+The recipe book allows the user to view wizard-generated recipes they have saved in the past.
+
+![](screenshots/recipe-book.png)
 
 
 ## External Dependencies

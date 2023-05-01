@@ -1,9 +1,6 @@
 import {Configuration, OpenAIApi} from "openai";
 import {createChatCompletion} from "./openai";
 
-// only needed because codehooks is jank
-const BASE_URL = "https://api.openai.com/v1".replace(/\/+$/, "");
-
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY
 })
@@ -54,11 +51,13 @@ export async function generateWizardResponse({prompt}, message, attempts = 0) {
         console.log("OpenAI request is ", request)
         const completion = await createChatCompletion(request)
         console.log("Response is ", completion)
-        const response = completion?.choices[0]?.message?.content;
+        const response = completion?.choices;
         if (!response) {
             return {response: {error: "Unable to reach Wizard at this time."}}
+        } else if(response.length < 1) {
+            return {response: {error: "The Wizard generated an empty response."}}
         }
-        const content = response.content
+        const content = response[0]?.message?.content
         try {
             return {response: JSON.parse(content)}
         } catch (error) {

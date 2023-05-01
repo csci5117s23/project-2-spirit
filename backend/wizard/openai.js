@@ -32,5 +32,4 @@ export async function createChatCompletion(options) {
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", requestOptions);
     return response.json();
-
 }

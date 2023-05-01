@@ -1,4 +1,8 @@
 import {Configuration, OpenAIApi} from "openai";
+import {createChatCompletion} from "./openai";
+
+// only needed because codehooks is jank
+const BASE_URL = "https://api.openai.com/v1".replace(/\/+$/, "");
 
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY
@@ -38,14 +42,19 @@ const antiHarmContext = `If the recipe prompt or ingredients are offensive, not 
  */
 export async function generateWizardResponse({prompt}, message, attempts = 0) {
     try {
-        const completion = await openai.createChatCompletion({
+        const request = {
             messages: [{
                 role: "system", content: buildPrompt(prompt)
             }, {
                 role: "user", content: JSON.stringify(message)
             }], model: OPENAI_MODEL
-        })
-        const response = completion.data.choices[0].message;
+        }
+        // Whatever stupid runtime codehooks chose to use (Node?) is out-of-date and does not conform to Node standards,
+        // so without this jank, the OpenAI call will just fail on deployed codehooks (even though it works *fine* on the localserver)
+        console.log("OpenAI request is ", request)
+        const completion = await createChatCompletion(request)
+        console.log("Response is ", completion)
+        const response = completion?.choices[0]?.message?.content;
         if (!response) {
             return {response: {error: "Unable to reach Wizard at this time."}}
         }
@@ -56,6 +65,7 @@ export async function generateWizardResponse({prompt}, message, attempts = 0) {
             return {response: {error: `Unable to parse Wizard response: ${error}`}}
         }
     } catch (error) {
+        console.log(error, error.stack)
         if (error.response) {
             if (error.response.status === 429) {
                 attempts++

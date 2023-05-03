@@ -45,31 +45,26 @@ app.use(async (req, res, next) => {
         console.log("Path ", req.path, " is exempt from rate limit")
         return next()
     }
-    console.log("Checking rate limit for req ", req)
     const db = await Datastore.open()
     const ip = req.headers['x-real-ip']
     // increment times IP has visited
     const count = await db.incr('IP_count_' + ip, 1, {ttl: 60 * 1000})
-    console.log("Rate limit count is ", count)
     if ((count?.val ?? 0) > WIZARD_RATE_LIMIT_PER_MIN) {
         res.json({ response: {error: "Rate limit reached", context: "You've sent too many requests to the Recipe Wizard recently. Please wait one minute."}})
     } else {
-        console.log("Req ", req, " passed rate limit")
         next()
     }
 })
 
 app.get('/wizard/categories', async (req, res) => {
-    console.log("Wizard categories with req ", req)
+    console.log("[WIZARD CATEGORIES] Request: ", req)
     if (!req.query.ingredients) {
-        console.log("Missing ingredients")
         res.json({response: {error: "No ingredients prompt provided."}})
     } else {
-        console.log("Ingredients are ", req.query.ingredients?.split(",") ?? [])
         const response = await generateWizardResponse(Prompts.recommendCategories(), {
             ingredients: req.query.ingredients?.split(",") ?? "",
         })
-        console.log("Response to category suggestions is ", response)
+        console.log("[WIZARD CATEGORIES] Request: ", req, " response: ", response)
         res.json(response)
     }
 })
@@ -82,23 +77,19 @@ app.get('/wizard/recipe', async (req, res) => {
             ingredients: req.query.ingredients?.split(",") ?? "",
             recipe: req.query.recipe,
         }
-        console.log("Ingredients are ", message.ingredients)
-        console.log("User is requesting with message ", message)
+        console.log("[WIZARD RECIPE] Request: ", message)
         const response = await generateWizardResponse(Prompts.recommendRecipe(), message)
-        console.log("GPT response is ", response)
+        console.log("[WIZARD RECIPE] Request: ", message, " Response: ", response)
         res.json(response)
     }
 })
 
 const userAuth = async (req, res, next) => {
     try {
-        console.log("Checking auth for req ", req)
         const {authorization} = req.headers;
         if (authorization) {
             const token = authorization.replace('Bearer ', '');
-            console.log("Authorization is ", token)
             const token_parsed = jwtDecode(token);
-            console.log("Parsed token is ", token_parsed)
             req.user_token = token_parsed;
         }
         next();
